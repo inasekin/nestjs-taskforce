@@ -1,7 +1,7 @@
 # Личный проект «TaskForce»
 
 * Студент: [Иван Насекин](https://up.htmlacademy.ru/nodejs-2/2/user/1785963).
-* Наставник: `Неизвестно`.
+* Наставник: [Артем Макаров](https://htmlacademy.ru/profile/deepsick).
 
 ---
 
