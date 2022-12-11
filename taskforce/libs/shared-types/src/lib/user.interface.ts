@@ -1,13 +1,3 @@
-import {UserRole} from './user-role.enum';
+import { UserContractor, UserCustomer } from '@taskforce/shared-types';
 
-export interface User {
-  _id?: string;
-  email: string;
-  firstname: string;
-  dateBirth: Date;
-  lastname: string;
-  city: string;
-  passwordHash: string;
-  role: UserRole;
-  avatar?: string;
-}
+export interface User extends UserCustomer, UserContractor {}

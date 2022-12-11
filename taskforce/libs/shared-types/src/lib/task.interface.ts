@@ -1,15 +1,20 @@
-import { Status } from "./status.enum";
+import { City, TaskTag, Status } from '@taskforce/shared-types';
 
 export interface Task {
-  id?: string;
+  id: string;
   title: string;
   description: string;
+  customerId: string;
   category: string;
-  cost?: number;
+  status: Status;
   dueDate?: Date;
-  img?: string;
+  city: City;
   address?: string;
-  tags?: string[];
-  creationDate?: Date;
-  status?: Status;
+  budget?: number;
+  tags?: TaskTag[];
+  imagePath?: string;
+  contractorId?: string;
+  responsesCount?: number;
+  commentsCount?: number;
+  isReviewed?: boolean;
 }
