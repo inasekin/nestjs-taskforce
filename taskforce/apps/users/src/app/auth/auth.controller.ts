@@ -17,9 +17,10 @@ import UpdateUserDto from './dto/update-user.dto';
 import { LoggedUserRdo } from './rdo/logged-user.rdo';
 import UpdateUserAvatarDto from './dto/update-user-avatar.dto';
 import { UserAvatarRdo } from './rdo/user-avatar.rdo';
-import { ApiResponse } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import UpdateUserPasswordDto from './dto/update-user-password.dto';
 
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
