@@ -34,7 +34,7 @@ export default class CreateUserDto {
 
   @ApiProperty({
     description: 'User birth date',
-    example: 'Format 1981-03-12',
+    example: '1981-03-12',
   })
   public dateBirth: Date;
 
