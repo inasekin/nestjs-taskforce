@@ -1,4 +1,6 @@
 import { User, City, UserRole } from '@taskforce/shared-types';
+import { genSalt, hash } from 'bcrypt';
+import { SALT_ROUNDS } from './user.constant';
 
 export class UserEntity implements User {
   public _id: string;
@@ -21,6 +23,12 @@ export class UserEntity implements User {
 
   constructor(userData: User) {
     this.fillEntity(userData);
+  }
+
+  public async setPassword(password: string): Promise<UserEntity> {
+    const salt = await genSalt(SALT_ROUNDS);
+    this.passwordHash = await hash(password, salt);
+    return this;
   }
 
   public toObject() {
