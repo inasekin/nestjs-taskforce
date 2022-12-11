@@ -10,8 +10,8 @@ export class UserEntity implements User {
   public dateBirth: Date;
   public email: string;
   public failedTasks: number;
-  public firstname: string;
-  public lastname: string;
+  public userName: string;
+  public lastName: string;
   public passwordHash: string;
   public publishedTasksCounter: number;
   public ranking: number;
@@ -47,8 +47,8 @@ export class UserEntity implements User {
     this.dateBirth = userData.dateBirth;
     this.email = userData.email;
     this.failedTasks = userData.failedTasks;
-    this.firstname = userData.firstname;
-    this.lastname = userData.lastname;
+    this.userName = userData.userName;
+    this.lastName = userData.lastName;
     this.passwordHash = userData.passwordHash;
     this.publishedTasksCounter = userData.publishedTasksCounter;
     this.ranking = userData.ranking;
