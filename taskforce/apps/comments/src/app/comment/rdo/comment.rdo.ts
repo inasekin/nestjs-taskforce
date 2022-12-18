@@ -1,16 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 
-export default class ReviewRdo {
+export default class CommentRdo {
   @ApiProperty({
-    description: 'Review id',
+    description: 'Comment id',
     example: '4353642828136379763',
   })
   @Expose()
   public _id: string;
 
   @ApiProperty({
-    description: 'Review creator id',
+    description: 'Comment creator id',
     example: 'd04eb35d-c36f-4e2b-b828-136379c7c6e3',
   })
   @Expose()
@@ -24,14 +24,14 @@ export default class ReviewRdo {
   public taskId: string;
 
   @ApiProperty({
-    description: 'Review creation date (ISO format)',
+    description: 'Comment creation date (ISO format)',
     example: '2022-11-06',
   })
   @Expose()
   public creationDate: Date;
 
   @ApiProperty({
-    description: 'Review text, string length min 10 max 300 characters',
+    description: 'Comment text, string length min 10 max 300 characters',
     example: 'Some text…',
   })
   @Expose()

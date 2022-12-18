@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { ReviewModule } from './review/review.module';
+import { CommentModule } from './comment/comment.module';
 
 @Module({
-  imports: [ReviewModule],
+  imports: [CommentModule],
   controllers: [],
   providers: [],
 })

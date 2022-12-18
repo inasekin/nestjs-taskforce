@@ -15,6 +15,6 @@ export interface Task {
   imagePath?: string;
   contractorId?: string;
   responsesCount?: number;
-  reviewsCount?: number;
+  commentsCount?: number;
   isReviewed?: boolean;
 }
