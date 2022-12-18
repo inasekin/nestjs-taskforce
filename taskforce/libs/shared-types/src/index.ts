@@ -9,4 +9,4 @@ export * from './lib/task-category.interface';
 export * from './lib/status.enum';
 export * from './lib/task-tag.interface';
 export * from './lib/review.interface';
-export * from './lib/comment.interface';
+export * from './lib/review.interface';

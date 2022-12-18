@@ -4,5 +4,5 @@ export interface UserRequest {
   costProposal?: number;
   contractorId: string;
   taskId: string;
-  dateCreated: Date;
+  creationDate: Date;
 }

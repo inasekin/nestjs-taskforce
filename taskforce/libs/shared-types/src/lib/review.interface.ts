@@ -1,6 +1,7 @@
 export interface Review {
-  id: string;
+  _id?: string;
+  authorId: string;
   text: string;
   taskId: string;
-  score: number;
+  creationDate?: Date;
 }
