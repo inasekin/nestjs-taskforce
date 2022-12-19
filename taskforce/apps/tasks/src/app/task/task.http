@@ -1,0 +1,22 @@
+# Create a new task
+POST http://localhost:3333/api/task/create HTTP/1.1
+Content-Type: application/json
+
+{
+  "title": "title",
+  "description": "description",
+  "customerId": "132324342",
+  "categoryId": "123123213213",
+  "dueDate": "2022-11-06",
+  "address": "address",
+  "budget": 1500,
+  "tags": ["d04eb35d", "4e2b"],
+  "imagePath": "task-image.png"
+}
+###
+
+# Find task
+GET http://localhost:3333/api/task/find/4a744cbd-715e-40a8-bd5b-9c951856f8e8 HTTP/1.1
+Content-Type: application/json
+
+###
