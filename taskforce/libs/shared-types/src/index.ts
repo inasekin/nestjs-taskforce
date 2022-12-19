@@ -10,3 +10,4 @@ export * from './lib/status.enum';
 export * from './lib/task-tag.inerface';
 export * from './lib/comment.interface';
 export * from './lib/comment.interface';
+export * from './lib/review.interface';
