@@ -13,7 +13,7 @@ import { CommentService } from './comment.service';
 import CreateCommentDto from './dto/create-comment.dto';
 import CommentRdo from './rdo/comment.rdo';
 
-@ApiTags('Комментарии')
+@ApiTags('comments')
 @Controller('comments')
 export class CommentController {
   constructor(private readonly commentsService: CommentService) {}
