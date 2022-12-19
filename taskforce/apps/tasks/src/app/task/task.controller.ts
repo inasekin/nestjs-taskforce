@@ -22,7 +22,7 @@ import { TaskService } from './task.service';
 export class TaskController {
   constructor(private readonly taskService: TaskService) {}
 
-  @Post('/create')
+  @Post('/create/')
   @ApiResponse({
     type: TaskRdo,
     status: HttpStatus.CREATED,

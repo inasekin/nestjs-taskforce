@@ -1,4 +1,4 @@
 export interface TaskTag {
-  _id: string;
-  tag: string;
+  id?: string;
+  title: string;
 }
