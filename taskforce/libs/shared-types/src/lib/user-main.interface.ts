@@ -1,4 +1,5 @@
-import { UserRole, City } from '@taskforce/shared-types';
+import { UserRole } from './user-role.enum';
+import { City } from './city.enum';
 
 export interface UserMain {
   _id?: string;
