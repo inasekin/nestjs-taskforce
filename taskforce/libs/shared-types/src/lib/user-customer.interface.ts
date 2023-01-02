@@ -1,4 +1,4 @@
-import { UserMain } from '@taskforce/shared-types';
+import { UserMain } from './user-main.interface';
 
 export interface UserCustomer extends UserMain {
   publishedTasksCounter?: number;
