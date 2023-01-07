@@ -5,7 +5,7 @@ Content-Type: application/json
 {
   "text": "some text",
   "contractorId": "123213123",
-  "customerId": "132324342",
+  "customerId": "63b1a0c2f87ee8ae9f3c042b",
   "taskId": "123123213213",
   "rating": 4
 }
