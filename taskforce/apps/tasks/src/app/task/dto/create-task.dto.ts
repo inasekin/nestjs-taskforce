@@ -23,7 +23,7 @@ export default class CreateTaskDto {
     description: 'Task task category id',
     example: '42b729e4-e002-4c05-9b58-f4fd6813683c',
   })
-  public categoryId: string;
+  public taskCategory: string;
 
   @ApiProperty({
     description: 'Task due date (ISO format)',
