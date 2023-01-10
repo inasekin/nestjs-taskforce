@@ -1,11 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { City, Status, TaskTag } from '@taskforce/shared-types';
 import { Expose } from 'class-transformer';
-import {TaskCategory, TaskTag} from "@taskforce/shared-types";
 
 export default class TaskRdo {
   @ApiProperty({
     description: 'The uniq task id',
-    example: 'd04eb35d-c36f-4e2b-b828-136379c7c6e3',
+    example: '4353642828136379763',
   })
   @Expose()
   public id: string;
@@ -32,25 +32,25 @@ export default class TaskRdo {
   public customerId: string;
 
   @ApiProperty({
-    description: 'Task task-category entity',
-    example: {id: 1, title: 'Перевозка'}
+    description: 'Task task-category id',
+    example: { id: 1, title: 'Перевозка' },
   })
   @Expose()
-  public taskCategory: TaskCategory;
+  public categoryId: string;
 
   @ApiProperty({
-    description: 'Task creation date (ISO format)',
-    example: '2022-11-01'
+    description: 'Task status',
+    example: 'Some text…',
   })
   @Expose()
-  public publishAt: Date;
+  public status: Status;
 
   @ApiProperty({
-    description: 'Task due date (ISO format)',
-    example: '2022-11-06',
+    description: 'Task city',
+    example: 'Some text…',
   })
   @Expose()
-  dueDate?: Date;
+  public city: City;
 
   @ApiProperty({
     description:
@@ -58,7 +58,21 @@ export default class TaskRdo {
     example: 'Some text…',
   })
   @Expose()
-  address?: string;
+  public address?: string;
+
+  @ApiProperty({
+    description: 'Task due date (ISO format)',
+    example: '2022-11-06',
+  })
+  @Expose()
+  public dueDate?: Date;
+
+  @ApiProperty({
+    description: 'Task creation date (ISO format)',
+    example: '2022-11-01',
+  })
+  @Expose()
+  public publishAt: Date;
 
   @ApiProperty({
     description: "Task estimation client's proposal, zero or positive number",
@@ -68,8 +82,11 @@ export default class TaskRdo {
   public budget?: number;
 
   @ApiProperty({
-    description: 'Array of task\'s tag entities',
-    example: [{id: 1, title: 'циклевка'}, {id: 2, title: 'ванная'}]
+    description: "Array of task's tag entities",
+    example: [
+      { id: 1, title: 'циклевка' },
+      { id: 2, title: 'ванная' },
+    ],
   })
   @Expose()
   tags?: TaskTag[];
@@ -82,15 +99,15 @@ export default class TaskRdo {
   imagePath?: string;
 
   @ApiProperty({
-    description: 'Executor\'s requests ids',
-    example: ['4353642828136379763', '4353642828136379763']
+    description: "Executor's requests ids",
+    example: ['4353642828136379763', '4353642828136379763'],
   })
   @Expose()
   public requestIds?: string[];
 
   @ApiProperty({
     description: 'Task comments ids',
-    example: ['4353642828136379763', '4353642828136379763']
+    example: ['4353642828136379763', '4353642828136379763'],
   })
   @Expose()
   public commentIds?: string[];

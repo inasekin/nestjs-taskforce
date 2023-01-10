@@ -1,4 +1,3 @@
-
 import { City, Entity, Task, Status, TaskTag } from '@taskforce/shared-types';
 
 export class TaskEntity implements Entity<TaskEntity>, Task {
@@ -20,14 +19,14 @@ export class TaskEntity implements Entity<TaskEntity>, Task {
   public commentIds: string[];
   public reviewId: string;
 
-  constructor(task:Task) {
+  constructor(task: Task) {
     this.fillEntity(task);
   }
 
   public toObject(): TaskEntity {
     return {
       ...this,
-      tags: this.tags.map(({id}) => ({ id })),
+      tags: this.tags.map(({ id }) => ({ id })),
     };
   }
 
@@ -45,8 +44,8 @@ export class TaskEntity implements Entity<TaskEntity>, Task {
     this.tags = [...entity.tags];
     this.imagePath = entity?.imagePath;
     this.contractorId = entity?.contractorId;
-    this.requestIds = entity?.requestIds?? [];
-    this.commentIds = entity?.commentIds?? [];
+    this.requestIds = entity?.requestIds ?? [];
+    this.commentIds = entity?.commentIds ?? [];
     this.reviewId = entity?.reviewId;
   }
 }

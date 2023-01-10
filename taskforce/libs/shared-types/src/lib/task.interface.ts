@@ -1,9 +1,9 @@
 import { City } from './city.enum';
 import { Status } from './status.enum';
-import {TaskTag} from "./task-tag.inerface";
+import { TaskTag } from './task-tag.inerface';
 
 export interface Task {
-  id: string;
+  id?: string;
   title: string;
   description: string;
   customerId: string;
