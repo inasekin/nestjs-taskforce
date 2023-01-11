@@ -1,31 +1,45 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post } from '@nestjs/common';
 import { fillObject } from '@taskforce/core';
-import { TaskTagService } from './task-tag.service';
 import CreateTaskTagDto from './dto/create-task-tag.dto';
+import UpdateTaskTagDto from './dto/update-task-tag.dto';
 import TaskTagRdo from './rdo/task-tag.rdo';
-import { ApiTags } from '@nestjs/swagger';
+import { TaskTagService } from './task-tag.service';
+import {ApiTags} from "@nestjs/swagger";
 
 @ApiTags('task tags')
 @Controller('tags')
 export class TaskTagController {
-  constructor(private taskTagService: TaskTagService) {}
+  constructor(
+    private tagService: TaskTagService
+  ) {}
 
-  @Get('/find/:id')
-  async show(@Param('id') id: string) {
-    const tagId = parseInt(id, 10);
-    const existTag = await this.taskTagService.getTagById(String(tagId));
-    return fillObject(TaskTagRdo, existTag);
+  @Post('/')
+  async create(@Body() dto: CreateTaskTagDto) {
+    const newTag = await this.tagService.create(dto);
+    return fillObject(TaskTagRdo, newTag);
   }
 
   @Get('/')
   async index() {
-    const tags = await this.taskTagService.getTags();
-    return fillObject(TaskTagRdo, tags);
+    const categories = await this.tagService.get();
+    return fillObject(TaskTagRdo, categories);
   }
 
-  @Post('/create/')
-  async create(@Body() dto: CreateTaskTagDto) {
-    const newTag = await this.taskTagService.create(dto);
-    return fillObject(TaskTagRdo, newTag);
+  @Get('/:id')
+  async show(@Param('id') id: string) {
+    const existTag = await this.tagService.getById(id);
+    return fillObject(TaskTagRdo, existTag);
+  }
+
+  @Patch('/:id')
+  async update(@Param('id') id: string, @Body() dto: UpdateTaskTagDto) {
+    const updatedTag = await this.tagService.update(id, dto)
+    return fillObject(TaskTagRdo, updatedTag);
+  }
+
+  @Delete('/:id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async destroy(@Param('id') id: string) {
+    await this.tagService.delete(id);
   }
 }

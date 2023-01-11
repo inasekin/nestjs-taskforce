@@ -1,6 +1,5 @@
 import { Body, Controller, Get, HttpStatus, Param, Post } from '@nestjs/common';
 import { fillObject } from '@taskforce/core';
-import CommentRdo from '../../../../comments/src/app/comment/rdo/comment.rdo';
 import CreateReviewDto from './dto/create-review.dto';
 import ReviewRdo from './rdo/review.rdo';
 import { ReviewsService } from './reviews.service';
@@ -37,6 +36,6 @@ export class ReviewsController {
   })
   async create(@Body() dto: CreateReviewDto) {
     const newReview = await this.reviewsService.create(dto);
-    return fillObject(CommentRdo, newReview);
+    return fillObject(ReviewRdo, newReview);
   }
 }

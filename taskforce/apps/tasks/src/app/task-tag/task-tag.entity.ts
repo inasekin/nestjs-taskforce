@@ -1,6 +1,6 @@
-import { TaskTag } from '@taskforce/shared-types';
+import { Entity, TaskTag } from '@taskforce/shared-types';
 
-export class TaskTagEntity implements TaskTag {
+export class TaskTagEntity implements Entity<TaskTagEntity>, TaskTag {
   public id: string;
   public title: string;
 
@@ -9,11 +9,11 @@ export class TaskTagEntity implements TaskTag {
   }
 
   public toObject() {
-    return { ...this };
+    return {...this};
   }
 
-  public fillEntity(tag: TaskTag) {
-    this.id = tag?.id;
-    this.title = tag?.title;
+  public fillEntity(entity: TaskTag) {
+    this.id = entity.id;
+    this.title = entity.title;
   }
 }

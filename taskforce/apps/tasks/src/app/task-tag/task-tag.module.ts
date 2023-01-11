@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
-import { TaskTagMemoryRepository } from './task-tag-memory.repository';
 import { TaskTagController } from './task-tag.controller';
+import { TaskTagRepository } from './task-tag.repository';
 import { TaskTagService } from './task-tag.service';
 
 @Module({
-  imports: [TaskTagModule],
+  imports: [],
   controllers: [TaskTagController],
-  providers: [TaskTagService, TaskTagMemoryRepository],
+  providers: [TaskTagService, TaskTagRepository],
+  exports: [TaskTagRepository],
 })
 export class TaskTagModule {}

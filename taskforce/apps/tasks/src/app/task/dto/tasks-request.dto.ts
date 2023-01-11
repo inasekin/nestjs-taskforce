@@ -2,17 +2,19 @@ import { ApiProperty } from '@nestjs/swagger';
 import { City, Status } from '@taskforce/shared-types';
 import { Expose } from 'class-transformer';
 
-export default class TasksRequestDto {
+export default class QueryTasksDto {
   @ApiProperty({
     description: 'Descending sort task by creation date',
     example: 'true',
   })
   public sortNewestTasks?: boolean;
+
   @ApiProperty({
     description: "Descending sort task by count of executor's responses",
     example: 'true',
   })
   public sortMostRequestedTasks?: boolean;
+
   @ApiProperty({
     description: 'Descending sort task by count of comments',
     example: 'true',
@@ -26,22 +28,22 @@ export default class TasksRequestDto {
   public status?: Status;
 
   @ApiProperty({
-    description: 'Task customer id to filter by',
-    example: '42b729e4-e002-4c05-9b58-f4fd6813683c',
+    description: 'Task creator id to filter by',
+    example: 'd04eb35d-c36f-4e2b-b828-136379c7c6e3',
   })
   public customerId?: string;
 
   @ApiProperty({
-    description: 'Task contractor id to filter by',
-    example: '42b729e4-e002-4c05-9b58-f4fd6813683c',
+    description: 'Task executor id to filter by',
+    example: 'd04eb35d-c36f-4e2b-b828-136379c7c6e3',
   })
   public contractorId?: string;
 
   @ApiProperty({
     description: 'Task category id to filter by',
-    example: '42b729e4-e002-4c05-9b58-f4fd6813683c',
+    example: '4353642828136379763',
   })
-  public categoryId?: string;
+  public taskCategory?: string;
 
   @ApiProperty({
     description: 'Task city name to filter by',
@@ -51,8 +53,8 @@ export default class TasksRequestDto {
   public city?: City;
 
   @ApiProperty({
-    description: 'Task tag ids to filter by',
-    example: '42b729e4-e002-4c05-9b58-f4fd6813683c',
+    description: 'Task tag id to filter by',
+    example: '4353642828136379763',
   })
-  tagId?: string;
+  taskTag?: number;
 }

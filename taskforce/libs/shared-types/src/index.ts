@@ -12,3 +12,4 @@ export * from './lib/task-tag.inerface';
 export * from './lib/comment.interface';
 export * from './lib/comment.interface';
 export * from './lib/review.interface';
+export * from './lib/entity.interface';
