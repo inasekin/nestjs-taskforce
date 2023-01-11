@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { Task as Entry } from '@prisma/client';
 import { CRUDRepository } from '@taskforce/core';
 import { City, Task, Status } from '@taskforce/shared-types';
 import { PrismaService } from '../prisma/prisma.service';
@@ -11,7 +10,7 @@ export class TaskRepository
 {
   constructor(private readonly prisma: PrismaService) {}
 
-  private adaptEntryToTask(entry: Entry): Task {
+  private adaptEntryToTask(entry): Task {
     return {
       ...entry,
       city: entry.city as City,

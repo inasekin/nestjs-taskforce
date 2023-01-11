@@ -10,7 +10,7 @@ export interface Task {
   categoryId: string;
   status: Status;
   dueDate?: Date;
-  publishAt: Date;
+  publishAt?: Date;
   city: City;
   address?: string;
   budget?: number;
