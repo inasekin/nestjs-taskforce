@@ -14,7 +14,7 @@ async function fillDb() {
             title: 'Убраться в квартире после сабантуя',
             description:
               'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas varius tortor nibh, sit amet tempor nibh finibus et. Aenean eu enim justo. Vestibulum aliquam hendrerit molestie. Mauris malesuada nisi sit amet augue accumsan tincidunt.',
-            clientId: '13',
+            customerId: '13',
             status: 'Новое',
             city: 'Москва',
             address: 'ул. Добронравова, д. 7',
@@ -48,7 +48,7 @@ async function fillDb() {
             title: 'Вскопать поле под картофель',
             description:
               'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas varius tortor nibh, sit amet tempor nibh finibus et. Aenean eu enim justo. Vestibulum aliquam hendrerit molestie. Mauris malesuada nisi sit amet augue accumsan tincidunt.',
-            clientId: '13',
+            customerId: '13',
             status: 'Новое',
             city: 'Владивосток',
             address: 'ул. Годунова, д. 3',
