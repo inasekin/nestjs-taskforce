@@ -12,6 +12,7 @@ export class AuthService {
       email: user.email,
       role: user.role,
       name: user.userName,
+      _id: user._id,
     };
 
     return {

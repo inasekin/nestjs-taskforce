@@ -17,21 +17,21 @@ export default class UserRepository
     return newUser.save();
   }
 
-  public async destroy(id: string): Promise<void> {
-    this.userModel.deleteOne({ id });
+  public async destroy(_id: string): Promise<void> {
+    this.userModel.deleteOne({ _id });
   }
 
-  public async findById(id: string): Promise<User | null> {
-    return this.userModel.findOne({ id }).exec();
+  public async findById(_id: string): Promise<User | null> {
+    return this.userModel.findOne({ _id }).exec();
   }
 
   public async findByEmail(email: string): Promise<User | null> {
     return this.userModel.findOne({ email }).exec();
   }
 
-  public async update(id: string, item: UserEntity): Promise<User> {
+  public async update(_id: string, item: UserEntity): Promise<User> {
     return this.userModel
-      .findByIdAndUpdate(id, item.toObject(), { new: true })
+      .findByIdAndUpdate(_id, item.toObject(), { new: true })
       .exec();
   }
 }

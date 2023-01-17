@@ -1,16 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { City } from '@taskforce/shared-types';
+import { City, File } from '@taskforce/shared-types';
 import {
   ArrayMaxSize,
   IsArray,
+  IsDate,
   IsEnum,
-  IsISO8601,
   Length,
   MaxLength,
   Validate,
 } from 'class-validator';
 import { Transform } from 'class-transformer';
-import { AgeValidator } from '../../validators/age-validator';
+import { AgeValidator } from '../../validators/age.validator';
 import {
   AuthUserError,
   MAX_LENGTH_USER_INFO,
@@ -22,6 +22,7 @@ import {
 
 export default class UpdateUserDto {
   @ApiProperty({
+    required: false,
     description: UserApiDescription.Name,
     example: 'Иван Иванов',
   })
@@ -31,6 +32,7 @@ export default class UpdateUserDto {
   public userName?: string;
 
   @ApiProperty({
+    required: false,
     description: UserApiDescription.City,
     example: City.Moscow,
   })
@@ -49,19 +51,28 @@ export default class UpdateUserDto {
   public userInfo?: string;
 
   @ApiProperty({
+    required: false,
     description: UserApiDescription.DateBirth,
     example: '1981-03-12',
   })
-  @IsISO8601({
+  @IsDate({
     message: AuthUserError.DateBirthNotValid,
   })
   @Validate(AgeValidator, {
     message: AuthUserError.AgeNotValid,
   })
   @Transform(({ value }) => new Date(value))
-  public dateBirth: Date;
+  public dateBirth?: Date;
 
   @ApiProperty({
+    required: false,
+    description: UserApiDescription.Avatar,
+    example: '{ url: images/user.png, name: user.png }',
+  })
+  public avatar?: File;
+
+  @ApiProperty({
+    required: false,
     description: UserApiDescription.Specialty,
     example: ['plumber', 'locksmith', 'mechanic'],
   })

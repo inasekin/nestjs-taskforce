@@ -1,5 +1,5 @@
-import { City } from './city.enum';
-import { Status } from './status.enum';
+import { City } from '../enums/city.enum';
+import { Status } from '../enums/status.enum';
 import { TaskTag } from './task-tag.inerface';
 
 export interface Task {

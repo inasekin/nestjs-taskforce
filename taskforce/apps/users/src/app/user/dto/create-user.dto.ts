@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { City, UserRole } from '@taskforce/shared-types';
 import { Transform } from 'class-transformer';
 import { IsDate, IsEmail, IsEnum, Length, Validate } from 'class-validator';
-import { AgeValidator } from '../../validators/age-validator';
+import { AgeValidator } from '../../validators/age.validator';
 import {
   AuthUserError,
   MAX_LENGTH_PASSWORD,

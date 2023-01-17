@@ -1,10 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  AuthUserError,
-  IMAGE_REGULAR_EXP,
-  UserApiDescription,
-} from '../user.constant';
-import { IsEmail, Matches } from 'class-validator';
+import { AuthUserError, UserApiDescription } from '../user.constant';
+import { IsEmail } from 'class-validator';
 
 export default class UpdateUserAvatarDto {
   @ApiProperty({
@@ -22,9 +18,6 @@ export default class UpdateUserAvatarDto {
   @ApiProperty({
     description: UserApiDescription.Avatar,
     example: '/images/user.png',
-  })
-  @Matches(IMAGE_REGULAR_EXP, {
-    message: AuthUserError.AvatarFileTypeWrong,
   })
   public avatar: string;
 }

@@ -1,6 +1,6 @@
 import { City } from '@taskforce/shared-types';
 import { Document } from 'mongoose';
-import { User, UserRole } from '@taskforce/shared-types';
+import { User, UserRole, File } from '@taskforce/shared-types';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 @Schema({
@@ -41,8 +41,14 @@ export class UserModel extends Document implements User {
   })
   public role: UserRole;
 
-  @Prop()
-  public avatar?: string;
+  @Prop({
+    _id: false,
+    type: File,
+  })
+  public avatar?: {
+    url: string;
+    name: string;
+  };
 
   @Prop()
   public userInfo?: string;

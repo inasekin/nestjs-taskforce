@@ -1,5 +1,6 @@
-import { UserRole } from './user-role.enum';
-import { City } from './city.enum';
+import { UserRole } from '../enums/user-role.enum';
+import { City } from '../enums/city.enum';
+import { File } from './file.interface';
 
 export interface UserMain {
   _id?: string;
@@ -9,6 +10,6 @@ export interface UserMain {
   passwordHash: string;
   dateBirth: Date;
   role: UserRole;
-  avatar?: string;
+  avatar?: File;
   userInfo?: string;
 }
