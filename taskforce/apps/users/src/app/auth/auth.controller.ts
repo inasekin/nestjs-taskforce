@@ -5,8 +5,10 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  Patch,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UserRdo } from './rdo/user.rdo';
@@ -19,6 +21,8 @@ import UpdateUserAvatarDto from './dto/update-user-avatar.dto';
 import { UserAvatarRdo } from './rdo/user-avatar.rdo';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import UpdateUserPasswordDto from './dto/update-user-password.dto';
+import { MongoidValidationPipe } from '../pipes/mongoid-validation.pipe';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -47,6 +51,7 @@ export class AuthController {
     return fillObject(LoggedUserRdo, verifiedUser);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   @ApiResponse({
     type: UserRdo,
@@ -58,7 +63,8 @@ export class AuthController {
     return fillObject(UserRdo, existUser);
   }
 
-  @Put('password')
+  @UseGuards(JwtAuthGuard)
+  @Patch('password')
   @ApiResponse({
     type: LoggedUserRdo,
     status: HttpStatus.OK,
@@ -69,7 +75,8 @@ export class AuthController {
     return fillObject(LoggedUserRdo, updatedUser);
   }
 
-  @Put('avatar')
+  @UseGuards(JwtAuthGuard)
+  @Patch('avatar')
   @ApiResponse({
     type: UserAvatarRdo,
     status: HttpStatus.OK,
@@ -80,13 +87,17 @@ export class AuthController {
     return fillObject(UserAvatarRdo, updatedUser);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Put(':id')
   @ApiResponse({
     type: UserRdo,
     status: HttpStatus.OK,
     description: 'User data has been successfully updated',
   })
-  async updateUserData(@Param('id') id: string, @Body() dto: UpdateUserDto) {
+  async updateUserData(
+    @Param('id', MongoidValidationPipe) id: string,
+    @Body() dto: UpdateUserDto
+  ) {
     const updatedUser = await this.authService.updateUserById(id, dto);
     return fillObject(UserRdo, updatedUser);
   }

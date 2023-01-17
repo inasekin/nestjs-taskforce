@@ -1,22 +1,21 @@
-import { Injectable } from '@nestjs/common';
-import CreateUserDto from './dto/create-user.dto';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { User } from '@taskforce/shared-types';
-import {
-  AUTH_USER_NOT_FOUND,
-  AUTH_USER_PASSWORD_WRONG,
-  ERROR_TEXT_AUTH_USER_EXISTS,
-} from './auth.constant';
-import * as dayjs from 'dayjs';
-import { LoginUserDto } from './dto/login-user.dto';
-import UpdateUserDto from './dto/update-user.dto';
-import UpdateUserAvatarDto from './dto/update-user-avatar.dto';
 import { UserEntity } from '../user/user.entity';
-import UpdateUserPasswordDto from './dto/update-user-password.dto';
 import UserRepository from '../user/user.repository';
+import { AuthUserError } from './auth.constant';
+import CreateUserDto from './dto/create-user.dto';
+import { LoginUserDto } from './dto/login-user.dto';
+import UpdateUserAvatarDto from './dto/update-user-avatar.dto';
+import UpdateUserPasswordDto from './dto/update-user-password.dto';
+import UpdateUserDto from './dto/update-user.dto';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly jwtService: JwtService
+  ) {}
 
   async register(dto: CreateUserDto) {
     const { userName, email, role, dateBirth, city, password } = dto;
@@ -26,7 +25,7 @@ export class AuthService {
       email,
       role,
       avatar: '',
-      dateBirth: dayjs(dateBirth).toDate(),
+      dateBirth,
       city,
       passwordHash: '',
     } as User;
@@ -34,7 +33,7 @@ export class AuthService {
     const existUser = await this.userRepository.findByEmail(email);
 
     if (existUser) {
-      throw new Error(ERROR_TEXT_AUTH_USER_EXISTS);
+      throw new Error(AuthUserError.Exists);
     }
 
     const userEntity = await new UserEntity(user).setPassword(password);
@@ -47,12 +46,12 @@ export class AuthService {
     const existUser = await this.userRepository.findByEmail(email);
 
     if (!existUser) {
-      throw new Error(AUTH_USER_NOT_FOUND);
+      throw new UnauthorizedException(AuthUserError.NotFound);
     }
 
     const userEntity = new UserEntity(existUser);
     if (!(await userEntity.comparePassword(password))) {
-      throw new Error(AUTH_USER_PASSWORD_WRONG);
+      throw new Error(AuthUserError.PasswordIsWrong);
     }
 
     return userEntity.toObject();
@@ -68,7 +67,7 @@ export class AuthService {
     const existUser = await this.userRepository.findByEmail(email);
 
     if (!existUser) {
-      throw new Error(AUTH_USER_NOT_FOUND);
+      throw new UnauthorizedException(AuthUserError.NotFound);
     }
     const userEntity = new UserEntity({ ...existUser, avatar });
     return this.userRepository.update(userEntity._id, userEntity);
@@ -93,9 +92,22 @@ export class AuthService {
     const existUser = await this.userRepository.findById(id);
 
     if (!existUser) {
-      throw new Error(AUTH_USER_NOT_FOUND);
+      throw new Error(AuthUserError.NotFound);
     }
     const newUserEntity = new UserEntity({ ...existUser, ...dto });
     return this.userRepository.update(newUserEntity._id, newUserEntity);
+  }
+
+  async loginUser(user: User) {
+    const payload = {
+      sub: user._id,
+      email: user.email,
+      role: user.role,
+      name: user.userName,
+    };
+
+    return {
+      access_token: await this.jwtService.signAsync(payload),
+    };
   }
 }

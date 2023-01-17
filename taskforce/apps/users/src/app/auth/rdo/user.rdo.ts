@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { City, UserRole } from '@taskforce/shared-types';
-import { Expose } from 'class-transformer';
+import { Expose, Transform } from 'class-transformer';
 import { UserApiDescription } from '../auth.constant';
 
 export class UserRdo {
@@ -8,6 +8,7 @@ export class UserRdo {
     description: UserApiDescription.Id,
     example: 'd04eb35d-c36f-4e2b-b828-136379c7c6e3',
   })
+  @Transform(({ obj }) => obj._id.toString())
   @Expose({ name: '_id' })
   public id: string;
 

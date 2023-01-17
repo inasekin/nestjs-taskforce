@@ -1,6 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { City, UserRole } from '@taskforce/shared-types';
-import { IsEmail, IsEnum, IsISO8601, Length } from 'class-validator';
+import { Transform } from 'class-transformer';
+import { IsEmail, IsEnum, IsISO8601, Length, Validate } from 'class-validator';
+import { AgeValidator } from '../../validators/age-validator';
 import {
   AuthUserError,
   MAX_LENGTH_PASSWORD,
@@ -34,6 +36,7 @@ export default class CreateUserDto {
   @IsEnum(City, {
     message: AuthUserError.CityIsWrong,
   })
+  @Transform(({ value }) => value as City)
   public city: City;
 
   @ApiProperty({
@@ -52,14 +55,19 @@ export default class CreateUserDto {
   @IsISO8601({
     message: AuthUserError.DateBirthNotValid,
   })
+  @Validate(AgeValidator, {
+    message: AuthUserError.AgeNotValid,
+  })
+  @Transform(({ value }) => new Date(value))
   public dateBirth: Date;
 
   @ApiProperty({
     description: UserApiDescription.Role,
-    example: 'Customer or contractor',
+    example: UserRole.Customer,
   })
   @IsEnum(UserRole, {
     message: AuthUserError.RoleIsWrong,
   })
+  @Transform(({ value }) => value as UserRole)
   public role: UserRole;
 }

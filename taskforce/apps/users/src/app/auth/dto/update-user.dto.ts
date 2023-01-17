@@ -7,25 +7,28 @@ import {
   IsISO8601,
   Length,
   MaxLength,
+  Validate,
 } from 'class-validator';
 import { Transform } from 'class-transformer';
+import { AgeValidator } from '../../validators/age-validator';
 import {
   AuthUserError,
-  UserApiDescription,
   MAX_LENGTH_USER_INFO,
   MAX_LENGTH_USERNAME,
+  MAX_SPECIALITY_LENGTH,
   MIN_LENGTH_USERNAME,
+  UserApiDescription,
 } from '../auth.constant';
 
 export default class UpdateUserDto {
   @ApiProperty({
     description: UserApiDescription.Name,
-    example: 'Keks Academiev',
+    example: 'Иван Иванов',
   })
   @Length(MIN_LENGTH_USERNAME, MAX_LENGTH_USERNAME, {
     message: AuthUserError.NameNotValid,
   })
-  public name?: string;
+  public userName?: string;
 
   @ApiProperty({
     description: UserApiDescription.City,
@@ -34,7 +37,7 @@ export default class UpdateUserDto {
   @IsEnum(City, {
     message: AuthUserError.CityIsWrong,
   })
-  public city?: string;
+  public city?: City;
 
   @ApiProperty({
     description: UserApiDescription.Info,
@@ -43,7 +46,7 @@ export default class UpdateUserDto {
   @MaxLength(MAX_LENGTH_USER_INFO, {
     message: AuthUserError.InfoNotValid,
   })
-  public info?: string;
+  public userInfo?: string;
 
   @ApiProperty({
     description: UserApiDescription.DateBirth,
@@ -52,7 +55,11 @@ export default class UpdateUserDto {
   @IsISO8601({
     message: AuthUserError.DateBirthNotValid,
   })
-  public dateBirth?: string;
+  @Validate(AgeValidator, {
+    message: AuthUserError.AgeNotValid,
+  })
+  @Transform(({ value }) => new Date(value))
+  public dateBirth: Date;
 
   @ApiProperty({
     description: UserApiDescription.Specialty,
@@ -60,6 +67,8 @@ export default class UpdateUserDto {
   })
   @IsArray()
   @Transform(({ value }) => new Set(value.map((item) => item.toLowerCase())))
-  @ArrayMaxSize(5)
-  public occupations?: string[];
+  @ArrayMaxSize(MAX_SPECIALITY_LENGTH, {
+    message: AuthUserError.SpecialtyNotValid,
+  })
+  public specialty?: string[];
 }
