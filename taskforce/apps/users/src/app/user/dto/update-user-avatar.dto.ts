@@ -3,7 +3,7 @@ import {
   AuthUserError,
   IMAGE_REGULAR_EXP,
   UserApiDescription,
-} from '../auth.constant';
+} from '../user.constant';
 import { IsEmail, Matches } from 'class-validator';
 
 export default class UpdateUserAvatarDto {

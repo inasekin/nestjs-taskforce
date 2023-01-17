@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { City, UserRole } from '@taskforce/shared-types';
 import { Expose, Transform } from 'class-transformer';
-import { UserApiDescription } from '../auth.constant';
+import { UserApiDescription } from '../user.constant';
 
 export class UserRdo {
   @ApiProperty({

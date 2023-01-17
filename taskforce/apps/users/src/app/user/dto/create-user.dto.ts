@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { City, UserRole } from '@taskforce/shared-types';
 import { Transform } from 'class-transformer';
-import { IsEmail, IsEnum, IsISO8601, Length, Validate } from 'class-validator';
+import { IsDate, IsEmail, IsEnum, Length, Validate } from 'class-validator';
 import { AgeValidator } from '../../validators/age-validator';
 import {
   AuthUserError,
@@ -10,12 +10,13 @@ import {
   MIN_LENGTH_PASSWORD,
   MIN_LENGTH_USERNAME,
   UserApiDescription,
-} from '../auth.constant';
+} from '../user.constant';
 
 export default class CreateUserDto {
   @ApiProperty({
     description: UserApiDescription.Email,
     example: 'admin@admin.ru',
+    required: true,
   })
   @IsEmail({}, { message: AuthUserError.EmailNotValid })
   public email: string;
@@ -23,6 +24,7 @@ export default class CreateUserDto {
   @ApiProperty({
     description: UserApiDescription.Name,
     example: 'Иван Иванов',
+    required: true,
   })
   @Length(MIN_LENGTH_USERNAME, MAX_LENGTH_USERNAME, {
     message: AuthUserError.NameNotValid,
@@ -32,6 +34,7 @@ export default class CreateUserDto {
   @ApiProperty({
     description: UserApiDescription.City,
     example: 'Москва',
+    required: true,
   })
   @IsEnum(City, {
     message: AuthUserError.CityIsWrong,
@@ -42,6 +45,7 @@ export default class CreateUserDto {
   @ApiProperty({
     description: UserApiDescription.Password,
     example: '123456',
+    required: true,
   })
   @Length(MIN_LENGTH_PASSWORD, MAX_LENGTH_PASSWORD, {
     message: AuthUserError.PasswordNotValid,
@@ -51,8 +55,9 @@ export default class CreateUserDto {
   @ApiProperty({
     description: UserApiDescription.DateBirth,
     example: '1981-03-12',
+    required: true,
   })
-  @IsISO8601({
+  @IsDate({
     message: AuthUserError.DateBirthNotValid,
   })
   @Validate(AgeValidator, {
@@ -64,6 +69,7 @@ export default class CreateUserDto {
   @ApiProperty({
     description: UserApiDescription.Role,
     example: UserRole.Customer,
+    required: true,
   })
   @IsEnum(UserRole, {
     message: AuthUserError.RoleIsWrong,

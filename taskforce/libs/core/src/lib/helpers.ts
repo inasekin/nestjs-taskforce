@@ -1,9 +1,15 @@
 import { plainToInstance, ClassConstructor } from 'class-transformer';
 
-export function fillObject<T, V>(someDto: ClassConstructor<T>, plainObject: V) {
-  return plainToInstance(someDto, plainObject, {
-    excludeExtraneousValues: true,
-  });
+export function fillObject<T, V>(
+  dto: ClassConstructor<T>,
+  plainObject: V,
+  groups: string[] = []
+) {
+  const options = !groups.length
+    ? { excludeExtraneousValues: true }
+    : { excludeExtraneousValues: true, groups: [...groups] };
+
+  return plainToInstance(dto, plainObject, { ...options });
 }
 
 export function getMongoConnectionString({

@@ -18,7 +18,7 @@ import {
   MAX_SPECIALITY_LENGTH,
   MIN_LENGTH_USERNAME,
   UserApiDescription,
-} from '../auth.constant';
+} from '../user.constant';
 
 export default class UpdateUserDto {
   @ApiProperty({
