@@ -1,115 +1,109 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { City, UserRole } from '@taskforce/shared-types';
 import { Expose } from 'class-transformer';
+import { UserApiDescription } from '../auth.constant';
 
 export class UserRdo {
   @ApiProperty({
-    description: 'The uniq user id',
+    description: UserApiDescription.Id,
     example: 'd04eb35d-c36f-4e2b-b828-136379c7c6e3',
   })
   @Expose({ name: '_id' })
   public id: string;
 
   @ApiProperty({
-    description: 'User email',
+    description: UserApiDescription.Email,
     example: 'user@user.local',
   })
   @Expose()
   public email: string;
 
   @ApiProperty({
-    description: 'User first name',
-    example: 'Иван',
+    description: UserApiDescription.Name,
+    example: 'Иван Иванов',
   })
   @Expose()
   public userName: string;
 
   @ApiProperty({
-    description: 'User last name',
-    example: 'Иванов',
-  })
-  @Expose()
-  public lastName: string;
-
-  @ApiProperty({
-    description: 'User city name',
+    description: UserApiDescription.City,
     example: 'Москва',
   })
   @Expose()
   public city: City;
 
   @ApiProperty({
-    description: 'User date birth (ISO format)',
+    description: UserApiDescription.DateBirth,
     example: '1981-03-12',
   })
   @Expose()
   public dateBirth: string;
 
   @ApiProperty({
-    description: 'User role',
+    description: UserApiDescription.Role,
     example: 'Customer or contractor',
   })
   @Expose()
   public role: UserRole;
 
   @ApiProperty({
-    description: 'User avatar',
+    description: UserApiDescription.Avatar,
     example: '/images/user.png',
   })
   @Expose()
   public avatar: string;
 
   @ApiProperty({
-    description: 'User information',
+    description: UserApiDescription.Info,
     example: 'Text about user',
   })
   @Expose()
   public userInfo: string;
 
   @ApiProperty({
-    description: 'Count of all tasks that client has created',
+    description: UserApiDescription.TasksPublished,
     example: '10',
   })
   @Expose()
   public publishedTasksCounter?: number;
 
   @ApiProperty({
-    description: 'Count of clients tasks with status "New"',
+    description: UserApiDescription.TasksNew,
     example: '10',
   })
   @Expose()
   tasksWithNewStatus?: number;
 
   @ApiProperty({
-    description: 'List of executors occupations',
+    description: UserApiDescription.Specialty,
     example: ['plumber', 'locksmith', 'mechanic'],
   })
   @Expose()
   public specialty?: string[];
 
   @ApiProperty({
-    description: 'Executor rating',
+    description: UserApiDescription.Rating,
     example: '10',
   })
   @Expose()
   public rating?: number;
 
   @ApiProperty({
-    description: 'Executor ranking',
+    description: UserApiDescription.Rank,
     example: '10',
   })
   @Expose()
   public ranking?: number;
 
   @ApiProperty({
-    description: 'Count of tasks that executor has done',
+    description: UserApiDescription.TaskDone,
     example: '10',
   })
   @Expose()
   public completedTasks?: number;
 
   @ApiProperty({
-    description: 'Count of tasks that executor has failed',
+    description: UserApiDescription.TaskFailed,
     example: '10',
   })
   @Expose()

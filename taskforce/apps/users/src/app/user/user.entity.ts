@@ -11,7 +11,6 @@ export class UserEntity implements User {
   public email: string;
   public failedTasks: number;
   public userName: string;
-  public lastName: string;
   public passwordHash: string;
   public publishedTasksCounter: number;
   public ranking: number;
@@ -48,7 +47,6 @@ export class UserEntity implements User {
     this.email = userData.email;
     this.failedTasks = userData.failedTasks;
     this.userName = userData.userName;
-    this.lastName = userData.lastName;
     this.passwordHash = userData.passwordHash;
     this.publishedTasksCounter = userData.publishedTasksCounter;
     this.ranking = userData.ranking;

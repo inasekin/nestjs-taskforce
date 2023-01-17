@@ -1,46 +1,65 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { City } from '@taskforce/shared-types';
+import {
+  ArrayMaxSize,
+  IsArray,
+  IsEnum,
+  IsISO8601,
+  Length,
+  MaxLength,
+} from 'class-validator';
+import { Transform } from 'class-transformer';
+import {
+  AuthUserError,
+  UserApiDescription,
+  MAX_LENGTH_USER_INFO,
+  MAX_LENGTH_USERNAME,
+  MIN_LENGTH_USERNAME,
+} from '../auth.constant';
 
 export default class UpdateUserDto {
   @ApiProperty({
-    description: 'You need to set a unique email address',
-    example: 'admin@admin.ru',
+    description: UserApiDescription.Name,
+    example: 'Keks Academiev',
   })
-  public email: string;
+  @Length(MIN_LENGTH_USERNAME, MAX_LENGTH_USERNAME, {
+    message: AuthUserError.NameNotValid,
+  })
+  public name?: string;
 
   @ApiProperty({
-    description: 'User first name',
-    example: 'Иван',
+    description: UserApiDescription.City,
+    example: City.Moscow,
   })
-  public userName: string;
+  @IsEnum(City, {
+    message: AuthUserError.CityIsWrong,
+  })
+  public city?: string;
 
   @ApiProperty({
-    description: 'User last name',
-    example: 'Иванов',
+    description: UserApiDescription.Info,
+    example: 'Some text…',
   })
-  public lastName: string;
+  @MaxLength(MAX_LENGTH_USER_INFO, {
+    message: AuthUserError.InfoNotValid,
+  })
+  public info?: string;
 
   @ApiProperty({
-    description: 'User city',
-    example: 'Москва',
-  })
-  public city: City;
-
-  @ApiProperty({
-    description: 'User information',
-    example: 'Text about user',
-  })
-  public userInfo: string;
-
-  @ApiProperty({
-    description: 'User birth date',
+    description: UserApiDescription.DateBirth,
     example: '1981-03-12',
   })
-  public dateBirth: Date;
+  @IsISO8601({
+    message: AuthUserError.DateBirthNotValid,
+  })
+  public dateBirth?: string;
 
   @ApiProperty({
-    description: 'User role',
-    example: ['locksmith'],
+    description: UserApiDescription.Specialty,
+    example: ['plumber', 'locksmith', 'mechanic'],
   })
-  public specialty: string[];
+  @IsArray()
+  @Transform(({ value }) => new Set(value.map((item) => item.toLowerCase())))
+  @ArrayMaxSize(5)
+  public occupations?: string[];
 }

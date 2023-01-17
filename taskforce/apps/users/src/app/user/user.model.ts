@@ -14,11 +14,6 @@ export class UserModel extends Document implements User {
 
   @Prop({
     required: true,
-  })
-  public lastName: string;
-
-  @Prop({
-    required: true,
     unique: true,
   })
   public email: string;

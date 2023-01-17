@@ -4,7 +4,6 @@ import { City } from './city.enum';
 export interface UserMain {
   _id?: string;
   userName: string;
-  lastName: string;
   email: string;
   city: City;
   passwordHash: string;
