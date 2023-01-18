@@ -71,7 +71,7 @@ async function fillDb() {
             title: 'Прополоть грядки с морковью',
             description:
               'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas varius tortor nibh, sit amet tempor nibh finibus et. Aenean eu enim justo. Vestibulum aliquam hendrerit molestie. Mauris malesuada nisi sit amet augue accumsan tincidunt.',
-            clientId: '13',
+            customerId: '13',
             status: 'Новое',
             dueDate: new Date('2023-04-23'),
             city: 'Санкт-Петербург',

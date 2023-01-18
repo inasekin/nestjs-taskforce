@@ -12,7 +12,7 @@ import {
 import { Transform } from 'class-transformer';
 import { AgeValidator } from '../../validators/age.validator';
 import {
-  AuthUserError,
+  UserApiError,
   MAX_LENGTH_USER_INFO,
   MAX_LENGTH_USERNAME,
   MAX_SPECIALITY_LENGTH,
@@ -27,7 +27,7 @@ export default class UpdateUserDto {
     example: 'Иван Иванов',
   })
   @Length(MIN_LENGTH_USERNAME, MAX_LENGTH_USERNAME, {
-    message: AuthUserError.NameNotValid,
+    message: UserApiError.NameNotValid,
   })
   public userName?: string;
 
@@ -37,7 +37,7 @@ export default class UpdateUserDto {
     example: City.Moscow,
   })
   @IsEnum(City, {
-    message: AuthUserError.CityIsWrong,
+    message: UserApiError.CityIsWrong,
   })
   public city?: City;
 
@@ -46,7 +46,7 @@ export default class UpdateUserDto {
     example: 'Some text…',
   })
   @MaxLength(MAX_LENGTH_USER_INFO, {
-    message: AuthUserError.InfoNotValid,
+    message: UserApiError.InfoNotValid,
   })
   public userInfo?: string;
 
@@ -56,10 +56,10 @@ export default class UpdateUserDto {
     example: '1981-03-12',
   })
   @IsDate({
-    message: AuthUserError.DateBirthNotValid,
+    message: UserApiError.DateBirthNotValid,
   })
   @Validate(AgeValidator, {
-    message: AuthUserError.AgeNotValid,
+    message: UserApiError.AgeNotValid,
   })
   @Transform(({ value }) => new Date(value))
   public dateBirth?: Date;
@@ -79,7 +79,7 @@ export default class UpdateUserDto {
   @IsArray()
   @Transform(({ value }) => new Set(value.map((item) => item.toLowerCase())))
   @ArrayMaxSize(MAX_SPECIALITY_LENGTH, {
-    message: AuthUserError.SpecialtyNotValid,
+    message: UserApiError.SpecialtyNotValid,
   })
   public specialty?: string[];
 }

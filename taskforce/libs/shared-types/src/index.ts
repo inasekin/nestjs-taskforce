@@ -11,6 +11,8 @@ export * from './lib/interfaces/comment.interface';
 export * from './lib/interfaces/review.interface';
 export * from './lib/interfaces/entity.interface';
 export * from './lib/interfaces/file.interface';
+export * from './lib/interfaces/refresh-token.interface';
+export * from './lib/interfaces/jwt-payload.interface';
 
 export * from './lib/enums/user-role.enum';
 export * from './lib/enums/city.enum';

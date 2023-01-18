@@ -23,7 +23,7 @@ export const MAX_SPECIALITY_LENGTH = 5;
 
 export const MIN_USER_AGE = 18;
 
-export const AuthUserError = {
+export const UserApiError = {
   AgeNotValid: `User should be alder than ${MIN_USER_AGE}`,
   CityIsWrong: `User city name field must contain any of these values: ${Object.values(
     City

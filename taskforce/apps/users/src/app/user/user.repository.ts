@@ -4,7 +4,9 @@ import { User } from '@taskforce/shared-types';
 import { Model } from 'mongoose';
 import { UserEntity } from './user.entity';
 import { UserModel } from './user.model';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export default class UserRepository
   implements CRUDRepository<UserEntity, string, User>
 {

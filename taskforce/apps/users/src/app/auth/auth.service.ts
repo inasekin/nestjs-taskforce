@@ -1,26 +1,85 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { User } from '@taskforce/shared-types';
+import { fillObject } from '@taskforce/core';
+import { JwtPayload, TokenSession } from '@taskforce/shared-types';
+import { TokenSessionEntity } from '../tokens/token-session.entity';
+import TokenSessionRepository from '../tokens/token-session.repository';
+import { AuthApiError } from './auth.constant';
+import { TokenDataDto } from './dto/token-data.dto';
+import { SessionTokenRdo } from './rdo/sesion-token.rdo';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly jwtService: JwtService) {}
+  constructor(
+    @Inject('JwtAccessService') private readonly jwtAccessService: JwtService,
+    @Inject('JwtRefreshService') private readonly jwtRefreshService: JwtService,
+    private readonly tokenSessionRepository: TokenSessionRepository
+  ) {}
 
-  async loginUser(user: User) {
-    const payload = {
-      sub: user._id,
-      email: user.email,
-      role: user.role,
-      name: user.userName,
-      _id: user._id,
-    };
-
+  private createPayload(dto: TokenDataDto): JwtPayload {
+    const { id, email, role } = dto;
     return {
-      access_token: await this.jwtService.signAsync(payload),
+      sub: id,
+      email: email,
+      role: role,
     };
   }
 
-  async getTokenData(token: string) {
-    return this.jwtService.decode(token);
+  async generateTokens(dto: TokenDataDto) {
+    const userId = dto.id;
+    const payload = this.createPayload(dto);
+    const accessToken = await this.jwtAccessService.signAsync(payload);
+    const refreshToken = await this.jwtRefreshService.signAsync(payload);
+
+    const expDateMilliseconds =
+      (await this.jwtRefreshService.decode(refreshToken)['exp']) * 1000;
+
+    const refreshTokenData = {
+      userId: userId,
+      expires: new Date(expDateMilliseconds),
+    };
+
+    const refreshTokenEntity = new TokenSessionEntity(refreshTokenData);
+    await refreshTokenEntity.setToken(refreshToken);
+
+    const existToken = await this.tokenSessionRepository.findByUserId(userId);
+    if (existToken) {
+      const tokenId = fillObject(SessionTokenRdo, existToken)['id'];
+      await this.tokenSessionRepository.update(tokenId, refreshTokenEntity);
+    } else {
+      await this.tokenSessionRepository.create(refreshTokenEntity);
+    }
+
+    return {
+      access_token: accessToken,
+      refresh_token: refreshToken,
+    };
+  }
+
+  async refreshTokens(dto: TokenDataDto, refreshToken: string) {
+    const userId = dto.id;
+    const existToken = await this.tokenSessionRepository.findByUserId(userId);
+    if (!existToken) {
+      throw new UnauthorizedException(AuthApiError.RefreshTokenNotFound);
+    }
+    await this.tokenSessionRepository.destroy(userId);
+
+    const refreshTokenEntity = new TokenSessionEntity(existToken);
+    const validateToken = await refreshTokenEntity.compareToken(refreshToken);
+    if (!validateToken) {
+      throw new UnauthorizedException(AuthApiError.RefreshTokenIsWrong);
+    }
+    return await this.generateTokens(dto);
+  }
+  async deleteRefreshToken(userId: string): Promise<void> {
+    return this.tokenSessionRepository.destroy(userId);
+  }
+  async getAccessTokenData(token: string) {
+    return this.jwtAccessService.decode(token);
+  }
+
+  async getSessionByToken(token: string): Promise<TokenSession | null> {
+    const { sub } = await this.getAccessTokenData(token);
+    return this.tokenSessionRepository.findByUserId(sub);
   }
 }

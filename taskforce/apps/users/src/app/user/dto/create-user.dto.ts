@@ -4,7 +4,7 @@ import { Transform } from 'class-transformer';
 import { IsDate, IsEmail, IsEnum, Length, Validate } from 'class-validator';
 import { AgeValidator } from '../../validators/age.validator';
 import {
-  AuthUserError,
+  UserApiError,
   MAX_LENGTH_PASSWORD,
   MAX_LENGTH_USERNAME,
   MIN_LENGTH_PASSWORD,
@@ -18,7 +18,7 @@ export default class CreateUserDto {
     example: 'admin@admin.ru',
     required: true,
   })
-  @IsEmail({}, { message: AuthUserError.EmailNotValid })
+  @IsEmail({}, { message: UserApiError.EmailNotValid })
   public email: string;
 
   @ApiProperty({
@@ -27,7 +27,7 @@ export default class CreateUserDto {
     required: true,
   })
   @Length(MIN_LENGTH_USERNAME, MAX_LENGTH_USERNAME, {
-    message: AuthUserError.NameNotValid,
+    message: UserApiError.NameNotValid,
   })
   public userName: string;
 
@@ -37,7 +37,7 @@ export default class CreateUserDto {
     required: true,
   })
   @IsEnum(City, {
-    message: AuthUserError.CityIsWrong,
+    message: UserApiError.CityIsWrong,
   })
   @Transform(({ value }) => value as City)
   public city: City;
@@ -48,7 +48,7 @@ export default class CreateUserDto {
     required: true,
   })
   @Length(MIN_LENGTH_PASSWORD, MAX_LENGTH_PASSWORD, {
-    message: AuthUserError.PasswordNotValid,
+    message: UserApiError.PasswordNotValid,
   })
   public password: string;
 
@@ -58,10 +58,10 @@ export default class CreateUserDto {
     required: true,
   })
   @IsDate({
-    message: AuthUserError.DateBirthNotValid,
+    message: UserApiError.DateBirthNotValid,
   })
   @Validate(AgeValidator, {
-    message: AuthUserError.AgeNotValid,
+    message: UserApiError.AgeNotValid,
   })
   @Transform(({ value }) => new Date(value))
   public dateBirth: Date;
@@ -72,7 +72,7 @@ export default class CreateUserDto {
     required: true,
   })
   @IsEnum(UserRole, {
-    message: AuthUserError.RoleIsWrong,
+    message: UserApiError.RoleIsWrong,
   })
   @Transform(({ value }) => value as UserRole)
   public role: UserRole;

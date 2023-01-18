@@ -30,6 +30,9 @@ export class UserModel extends Document implements User {
   })
   public passwordHash: string;
 
+  @Prop()
+  public refreshTokenHash?: string;
+
   @Prop({
     required: true,
   })
