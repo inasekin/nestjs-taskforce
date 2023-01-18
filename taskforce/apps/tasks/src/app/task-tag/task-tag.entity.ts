@@ -9,7 +9,7 @@ export class TaskTagEntity implements Entity<TaskTagEntity>, TaskTag {
   }
 
   public toObject() {
-    return {...this};
+    return { ...this };
   }
 
   public fillEntity(entity: TaskTag) {

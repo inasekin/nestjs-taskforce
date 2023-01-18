@@ -1,50 +1,61 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Param,
+  Controller,
   Delete,
+  Get,
+  HttpCode,
   HttpStatus,
-  Headers,
+  Param,
+  ParseIntPipe,
+  Post,
+  Query,
 } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { fillObject } from '@taskforce/core';
 import { CommentService } from './comment.service';
 import CreateCommentDto from './dto/create-comment.dto';
+import { CommentQuery } from './query/comment.query';
 import CommentRdo from './rdo/comment.rdo';
 
-@ApiTags('comments')
-@Controller('comments')
+@Controller('comment')
 export class CommentController {
-  constructor(private readonly commentsService: CommentService) {}
+  constructor(private commentService: CommentService) {}
 
-  @ApiResponse({
-    type: CreateCommentDto,
-    status: HttpStatus.CREATED,
-  })
-  @Post()
-  create(
-    @Body() createCommentsDto: CreateCommentDto,
-    @Headers('User-id') authorId: string
+  @Post('/')
+  public async create(@Body() dto: CreateCommentDto) {
+    const newComment = await this.commentService.create(dto);
+    return fillObject(CommentRdo, newComment);
+  }
+
+  @Get('/:id')
+  public async show(@Param('id', ParseIntPipe) id: string) {
+    const comment = await this.commentService.getCommentById(id);
+    return fillObject(CommentRdo, comment);
+  }
+
+  @Get('/')
+  public async index(@Query() query: CommentQuery) {
+    const comments = await this.commentService.getComments(query);
+    return fillObject(CommentRdo, comments);
+  }
+
+  @Delete('/:id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  public async destroy(@Param('id', ParseIntPipe) id: string) {
+    /*
+    Logic for checking if user is not owner of the comment
+    const { authorId } = await this.commentService.getCommentById(id);
+    if (userId !== authorId ) {
+      throw new UnauthorizedException('User can delete own comment only')
+    }
+    */
+    await this.commentService.deleteComment(id);
+  }
+
+  @Delete('/:taskId/task')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  public async destroyTaskComments(
+    @Param('taskId', ParseIntPipe) taskId: string
   ) {
-    return this.commentsService.create(authorId, createCommentsDto);
-  }
-
-  @ApiResponse({
-    type: CommentRdo,
-    status: HttpStatus.OK,
-  })
-  @Get('tasks/:id')
-  getTaskComments(@Param('id') taskId: string) {
-    return this.commentsService.getTaskComments(taskId);
-  }
-
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Comment deleted.',
-  })
-  @Delete(':id')
-  deleteComment(@Param('id') id: string) {
-    return this.commentsService.deleteComment(id);
+    await this.commentService.deleteCommentsByTaskId(taskId);
   }
 }

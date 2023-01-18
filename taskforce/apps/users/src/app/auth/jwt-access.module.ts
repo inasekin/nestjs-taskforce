@@ -9,15 +9,13 @@ import { AccessTokenStrategy } from './strategies/access-token.strategy';
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: getJwtAccessOptions,
-    }),
-  ],
-  providers: [
-    {
-      provide: 'JwtAccessService',
-      useExisting: JwtService,
+      useFactory: getJwtAccessOptions
+  })],
+  providers: [{
+    provide: 'JwtAccessService',
+    useExisting: JwtService
     },
-    AccessTokenStrategy,
+    AccessTokenStrategy
   ],
   exports: ['JwtAccessService'],
 })

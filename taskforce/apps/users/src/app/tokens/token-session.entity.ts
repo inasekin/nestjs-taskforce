@@ -21,7 +21,7 @@ export class TokenSessionEntity implements TokenSession {
     return compare(token, this.tokenHash);
   }
   public toObject() {
-    return { ...this };
+    return {...this};
   }
 
   public fillEntity(tokenData: TokenSession) {

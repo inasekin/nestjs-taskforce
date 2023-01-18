@@ -1,27 +1,27 @@
-import { User, City, UserRole, File } from '@taskforce/shared-types';
+import { City, File, User, UserRole } from '@taskforce/shared-types';
 import { compare, genSalt, hash } from 'bcrypt';
 import { SALT_ROUNDS } from './user.constant';
 
 export class UserEntity implements User {
   public _id: string;
-  public avatar: File;
-  public city: City;
-  public completedTasks: number;
-  public dateBirth: Date;
   public email: string;
-  public failedTasks: number;
   public userName: string;
+  public city: City;
   public passwordHash: string;
-  public publishedTasksCounter: number;
-  public ranking: number;
-  public rating: number;
+  public dateBirth: Date;
   public role: UserRole;
-  public specialty: string[];
-  public tasksWithNewStatus: number;
-  public userInfo: string;
+  public avatar?: File;
+  public userInfo?: string;
+  public publishedTasksCounter?: number;
+  public tasksWithNewStatus?: number;
+  public specialty?: string[];
+  public rating?: number;
+  public ranking?: number;
+  public completedTasks?: number;
+  public failedTasks?: number;
 
-  constructor(userData: User) {
-    this.fillEntity(userData);
+  constructor(user: User) {
+    this.fillEntity(user);
   }
 
   public async setPassword(password: string): Promise<UserEntity> {
@@ -38,22 +38,26 @@ export class UserEntity implements User {
     return { ...this };
   }
 
-  public fillEntity(userData: User) {
-    this._id = userData._id;
-    this.avatar = userData.avatar;
-    this.city = userData.city;
-    this.completedTasks = userData.completedTasks;
-    this.dateBirth = userData.dateBirth;
-    this.email = userData.email;
-    this.failedTasks = userData.failedTasks;
-    this.userName = userData.userName;
-    this.passwordHash = userData.passwordHash;
-    this.publishedTasksCounter = userData.publishedTasksCounter;
-    this.ranking = userData.ranking;
-    this.rating = userData.rating;
-    this.role = userData.role;
-    this.specialty = userData.specialty;
-    this.tasksWithNewStatus = userData.tasksWithNewStatus;
-    this.userInfo = userData.userInfo;
+  public fillEntity(user: User) {
+    this._id = user._id;
+    this.email = user.email;
+    this.userName = user.userName;
+    this.city = user.city;
+    this.passwordHash = user.passwordHash;
+    this.dateBirth = user.dateBirth;
+    this.role = user.role;
+    this.avatar = user.avatar;
+    this.userInfo = user.userInfo;
+
+    if (user.role === UserRole.Customer) {
+      this.publishedTasksCounter = user?.publishedTasksCounter;
+      this.tasksWithNewStatus = user?.tasksWithNewStatus;
+    } else {
+      this.specialty = user?.specialty;
+      this.rating = user?.rating;
+      this.ranking = user?.ranking;
+      this.completedTasks = user?.completedTasks;
+      this.failedTasks = user?.failedTasks;
+    }
   }
 }

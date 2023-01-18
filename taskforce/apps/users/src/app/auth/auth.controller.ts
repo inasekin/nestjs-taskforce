@@ -10,13 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import {
-  fillObject,
-  JwtAccessGuard,
-  JwtRefreshGuard,
-  UserData,
-} from '@taskforce/core';
-import { TokenSession } from '@taskforce/shared-types';
+import { fillObject, JwtAccessGuard, JwtRefreshGuard, UserData } from '@taskforce/core';
 import CreateUserDto from '../user/dto/create-user.dto';
 import { UserRdo } from '../user/rdo/user.rdo';
 import { UserService } from '../user/user.service';
@@ -31,25 +25,18 @@ import TokenDataRdo from './rdo/token-data.rdo';
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
   ) {}
 
   @ApiResponse({
     status: HttpStatus.CREATED,
-    description: 'The new user has been successfully created.',
+    description: 'The new user has been successfully created.'
   })
   @Post('signup')
-  async signupUser(
-    @Headers('authorization') token: string,
-    @Body() dto: CreateUserDto
-  ) {
-    let existSession: TokenSession;
-    if (token) {
-      const authToken = token.replace('Bearer', '').trim();
-      existSession = await this.authService.getSessionByToken(authToken);
-    }
-    if (existSession) {
-      throw new UnauthorizedException(AuthApiError.AlreadyAuthorized);
+  async signupUser(@Headers('authorization') token: string, @Body() dto: CreateUserDto) {
+    const activeUserSession = await this.authService.checkAuthorizationStatus(token);
+    if (!!activeUserSession) {
+      throw new UnauthorizedException(AuthApiError.AlreadyAuthorized)
     }
 
     const newUser = await this.userService.create(dto);
@@ -61,7 +48,7 @@ export class AuthController {
   @ApiResponse({
     type: LoggedUserRdo,
     status: HttpStatus.OK,
-    description: 'User has been successfully logged.',
+    description: 'User has been successfully logged.'
   })
   @Post('login')
   async login(@Body() dto: LoginUserDto) {
@@ -73,7 +60,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Auth token is valid.',
+    description: 'Auth token is valid.'
   })
   @Get()
   @UseGuards(JwtAccessGuard)
@@ -88,14 +75,13 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'The tokens are refreshed.',
+    description: 'The tokens are refreshed.'
   })
   @Post('refresh')
   @UseGuards(JwtRefreshGuard)
   async refreshToken(
     @UserData('id') userId: string,
-    @UserData('refreshToken') refreshToken: string
-  ) {
+    @UserData('refreshToken') refreshToken: string) {
     const existUser = await this.userService.getById(userId);
     const tokenData = fillObject(TokenDataRdo, existUser);
     return this.authService.refreshTokens(tokenData, refreshToken);
@@ -104,12 +90,12 @@ export class AuthController {
   @HttpCode(HttpStatus.ACCEPTED)
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'The user is logout.',
+    description: 'The user is logout.'
   })
   @Post('logout')
   @UseGuards(JwtAccessGuard)
-  async logoutUser(@UserData('id') userId: string) {
-    await this.authService.deleteRefreshToken(userId);
-    return HttpStatus.ACCEPTED;
+  async logoutUser(@UserData('id') userId: string,) {
+   await this.authService.deleteRefreshToken(userId);
+   return HttpStatus.ACCEPTED
   }
 }

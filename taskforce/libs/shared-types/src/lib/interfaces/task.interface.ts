@@ -1,6 +1,7 @@
 import { City } from '../enums/city.enum';
 import { Status } from '../enums/status.enum';
-import { TaskTag } from './task-tag.inerface';
+import { TaskTag } from './task-tag.interface';
+import { File } from './file.interface';
 
 export interface Task {
   id?: string;
@@ -9,15 +10,17 @@ export interface Task {
   customerId: string;
   categoryId: string;
   status: Status;
-  dueDate?: Date;
-  publishAt?: Date;
   city: City;
   address?: string;
+  dueDate?: Date;
+  publishAt?: Date;
   budget?: number;
   tags?: TaskTag[];
-  imagePath?: string;
+  taskPicture?: File;
   contractorId?: string;
-  requestIds?: string[];
-  commentIds?: string[];
-  reviewId?: string;
+  applicantsCount?: number;
+  applicantsIds?: string[];
+  commentsCount?: number;
+  isReviewed?: boolean;
+  isSent?: boolean;
 }

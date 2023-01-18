@@ -1,7 +1,7 @@
 export enum Status {
-  New = 'new',
-  Canceled = 'canceled',
-  InWork = 'inWork',
-  Done = 'Done',
-  Failed = 'Failed'
+  New = 'Новое',
+  InProgress = 'Выполняется',
+  Rejected = 'Отменено',
+  Done = 'Исполнено',
+  Failed = 'Провалено',
 }

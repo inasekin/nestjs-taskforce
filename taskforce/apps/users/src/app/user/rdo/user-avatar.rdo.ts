@@ -4,8 +4,8 @@ import { UserApiDescription } from '../user.constant';
 
 export class UserAvatarRdo {
   @ApiProperty({
-    description: UserApiDescription.Avatar,
-    example: '/images/user.png',
+    description: UserApiDescription.Image,
+    example: '/images/user.png'
   })
   @Expose()
   public avatar: string;

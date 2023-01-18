@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '.prisma/tasks-client';
 
 const prisma = new PrismaClient();
 
@@ -31,7 +31,7 @@ async function fillDb() {
                 },
               ],
             },
-            imagePath: '',
+            taskPicture: { url: 'url/name.jpg', name: 'name.jpg' },
           },
         ],
       },
@@ -65,7 +65,7 @@ async function fillDb() {
                 },
               ],
             },
-            imagePath: '',
+            taskPicture: { url: 'url/name.jpg', name: 'name.jpg' },
           },
           {
             title: 'Прополоть грядки с морковью',
@@ -89,7 +89,7 @@ async function fillDb() {
                 },
               ],
             },
-            imagePath: '',
+            taskPicture: { url: 'url/name.jpg', name: 'name.jpg' },
           },
         ],
       },

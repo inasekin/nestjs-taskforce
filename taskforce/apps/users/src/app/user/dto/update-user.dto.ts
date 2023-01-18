@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { City, File } from '@taskforce/shared-types';
+import { Transform } from 'class-transformer';
 import {
   ArrayMaxSize,
   IsArray,
@@ -9,22 +10,21 @@ import {
   MaxLength,
   Validate,
 } from 'class-validator';
-import { Transform } from 'class-transformer';
 import { AgeValidator } from '../../validators/age.validator';
 import {
   UserApiError,
-  MAX_LENGTH_USER_INFO,
-  MAX_LENGTH_USERNAME,
-  MAX_SPECIALITY_LENGTH,
-  MIN_LENGTH_USERNAME,
   UserApiDescription,
+  MAX_SPECIALITY_LENGTH,
+  MAX_LENGTH_USER_INFO,
+  MIN_LENGTH_USERNAME,
+  MAX_LENGTH_USERNAME,
 } from '../user.constant';
 
 export default class UpdateUserDto {
   @ApiProperty({
     required: false,
     description: UserApiDescription.Name,
-    example: 'Иван Иванов',
+    example: 'Keks Academiev',
   })
   @Length(MIN_LENGTH_USERNAME, MAX_LENGTH_USERNAME, {
     message: UserApiError.NameNotValid,
@@ -42,6 +42,7 @@ export default class UpdateUserDto {
   public city?: City;
 
   @ApiProperty({
+    required: false,
     description: UserApiDescription.Info,
     example: 'Some text…',
   })
@@ -66,20 +67,20 @@ export default class UpdateUserDto {
 
   @ApiProperty({
     required: false,
-    description: UserApiDescription.Avatar,
+    description: UserApiDescription.Image,
     example: '{ url: images/user.png, name: user.png }',
   })
   public avatar?: File;
 
   @ApiProperty({
     required: false,
-    description: UserApiDescription.Specialty,
+    description: UserApiDescription.Occupation,
     example: ['plumber', 'locksmith', 'mechanic'],
   })
   @IsArray()
   @Transform(({ value }) => new Set(value.map((item) => item.toLowerCase())))
   @ArrayMaxSize(MAX_SPECIALITY_LENGTH, {
-    message: UserApiError.SpecialtyNotValid,
+    message: UserApiError.OccupationNotValid,
   })
   public specialty?: string[];
 }

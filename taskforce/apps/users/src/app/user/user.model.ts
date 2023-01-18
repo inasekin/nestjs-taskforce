@@ -1,10 +1,10 @@
-import { City } from '@taskforce/shared-types';
-import { Document } from 'mongoose';
-import { User, UserRole, File } from '@taskforce/shared-types';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { City, File, User, UserRole } from '@taskforce/shared-types';
+import { Document } from 'mongoose';
 
+const USERS_COLLECTION_NAME = 'users';
 @Schema({
-  collection: 'users',
+  collection: USERS_COLLECTION_NAME,
 })
 export class UserModel extends Document implements User {
   @Prop({
@@ -41,6 +41,7 @@ export class UserModel extends Document implements User {
   @Prop({
     required: true,
     type: String,
+    enum: UserRole,
   })
   public role: UserRole;
 

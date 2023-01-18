@@ -6,6 +6,7 @@ import { Document } from 'mongoose';
   collection: 'token-session',
 })
 export class TokenSessionModel extends Document implements TokenSession {
+
   @Prop({
     required: true,
   })
@@ -22,5 +23,4 @@ export class TokenSessionModel extends Document implements TokenSession {
   public expires: Date;
 }
 
-export const TokenSessionSchema =
-  SchemaFactory.createForClass(TokenSessionModel);
+export const TokenSessionSchema = SchemaFactory.createForClass(TokenSessionModel);

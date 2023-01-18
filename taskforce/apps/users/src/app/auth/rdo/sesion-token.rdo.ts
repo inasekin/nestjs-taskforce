@@ -1,8 +1,8 @@
 import { Expose, Transform } from 'class-transformer';
 
 export class SessionTokenRdo {
-  @Transform(({ obj }) => obj._id.toString())
-  @Expose({ name: '_id' })
+  @Transform(({obj}) => obj._id.toString())
+  @Expose({name: '_id'})
   public id: string;
 
   @Expose()

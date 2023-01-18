@@ -3,12 +3,12 @@ POST http://localhost:3333/api/user/register HTTP/1.1
 Content-Type: application/json
 
 {
-  "userName": "Keks",
-  "email": "test@test.ru",
+  "name": "Keks",
+  "email": "user@notfound.local",
   "city": "Москва",
   "password": "123456",
   "dateBirth": "2003-12-22",
-  "role": "customer"
+  "role": "client"
 }
 ###
 
@@ -22,4 +22,35 @@ Content-Type: application/json
   "currentPassword": "123456",
   "newPassword": "234567"
 }
+###
+
+#3 Upload user's avatar
+POST http://localhost:3333/api/user/avatar HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2E4OTg1YjUyNjFmOGM5ZTJlYzI2MjMiLCJlbWFpbCI6InVzZXJAbm90Zm91bmQubG9jYWwiLCJyb2xlIjoiY2xpZW50IiwibmFtZSI6Iktla3MiLCJfaWQiOiI2M2E4OTg1YjUyNjFmOGM5ZTJlYzI2MjMiLCJpYXQiOjE2NzIwNDI4NzEsImV4cCI6MTY3MjA0MzQ3MX0.yL5NstEQ5Uv5AOyfLe9iZ-xWeE2zfjIGi11beGURB8E
+Content-Type: multipart/form-data; boundary=WebKitFormBoundary
+
+--WebKitFormBoundary
+Content-Disposition: form-data; name="avatar"; filename="1.png"
+Content-Type: image/png
+
+< ../../markup/img/avatars/1.png
+--WebKitFormBoundary--
+###
+
+#4 Update user's data
+PATCH http://localhost:3333/api/user/63a8985b5261f8c9e2ec2623 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2E4OTg1YjUyNjFmOGM5ZTJlYzI2MjMiLCJlbWFpbCI6InVzZXJAbm90Zm91bmQubG9jYWwiLCJyb2xlIjoiY2xpZW50IiwibmFtZSI6Iktla3MiLCJfaWQiOiI2M2E4OTg1YjUyNjFmOGM5ZTJlYzI2MjMiLCJpYXQiOjE2NzIwMzE5OTMsImV4cCI6MTY3MjAzMjU5M30.9iimPYl403NOvtvhkQ5oRi388s_cCZsFTKybynfIBCw
+Content-Type: application/json
+
+{
+  "name": "Felix",
+  "city": "Санкт-Петербург",
+  "dateBirth": "2002-04-22"
+}
+###
+
+#5 Get user by ID
+GET http://localhost:3333/api/user/63a8985b5261f8c9e2ec2623 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2E4OTg1YjUyNjFmOGM5ZTJlYzI2MjMiLCJlbWFpbCI6InVzZXJAbm90Zm91bmQubG9jYWwiLCJyb2xlIjoiY2xpZW50IiwibmFtZSI6Iktla3MiLCJfaWQiOiI2M2E4OTg1YjUyNjFmOGM5ZTJlYzI2MjMiLCJpYXQiOjE2NzIwMzc4NDIsImV4cCI6MTY3MjAzODQ0Mn0.1xwvVGVYe6rT23452k5lUuiOTmRMqrcvjB8m8rbwTB8
+
 ###

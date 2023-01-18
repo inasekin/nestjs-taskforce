@@ -3,31 +3,44 @@
  * This is only a minimal backend to get started.
  */
 
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-
+import * as process from 'process';
 import { AppModule } from './app/app.module';
+import { getRabbitMqConfig } from './config/rabbitmq.config';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const tasksApp = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()
-    .setTitle('The Tasks service')
+    .setTitle('The «Tasks» service')
     .setDescription('Tasks service API')
     .setVersion('1.0')
     .build();
 
   const globalPrefix = 'api';
-  app.setGlobalPrefix(globalPrefix);
+  tasksApp.setGlobalPrefix(globalPrefix);
 
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('spec', app, document);
-  app.setGlobalPrefix(globalPrefix);
-  const port = process.env.PORT || 3333;
-  await app.listen(port);
+  const document = SwaggerModule.createDocument(tasksApp, config);
+  SwaggerModule.setup('spec', tasksApp, document);
+
+  const configService = tasksApp.get<ConfigService>(ConfigService);
+  tasksApp.connectMicroservice(getRabbitMqConfig(configService));
+  Logger.log(getRabbitMqConfig(configService));
+
+  await tasksApp.startAllMicroservices();
+
+  tasksApp.useGlobalPipes(new ValidationPipe({
+    transform: true,
+    skipUndefinedProperties: true
+  }));
+
+  const port = process.env.PORT || 3334;
+  await tasksApp.listen(port);
   Logger.log(
-    `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`
+    `🚀 Tasks application is running on: http://localhost:${port}/${globalPrefix}`
   );
 }
 

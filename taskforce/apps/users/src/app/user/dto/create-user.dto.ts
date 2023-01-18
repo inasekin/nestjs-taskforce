@@ -1,21 +1,21 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { City, UserRole } from '@taskforce/shared-types';
+import { City, InputExample, UserRole } from '@taskforce/shared-types';
 import { Transform } from 'class-transformer';
 import { IsDate, IsEmail, IsEnum, Length, Validate } from 'class-validator';
 import { AgeValidator } from '../../validators/age.validator';
 import {
+  UserApiDescription,
   UserApiError,
-  MAX_LENGTH_PASSWORD,
+  MIN_LENGTH_USERNAME,
   MAX_LENGTH_USERNAME,
   MIN_LENGTH_PASSWORD,
-  MIN_LENGTH_USERNAME,
-  UserApiDescription,
+  MAX_LENGTH_PASSWORD,
 } from '../user.constant';
 
 export default class CreateUserDto {
   @ApiProperty({
     description: UserApiDescription.Email,
-    example: 'admin@admin.ru',
+    example: InputExample.Email,
     required: true,
   })
   @IsEmail({}, { message: UserApiError.EmailNotValid })
@@ -23,7 +23,7 @@ export default class CreateUserDto {
 
   @ApiProperty({
     description: UserApiDescription.Name,
-    example: 'Иван Иванов',
+    example: InputExample.Name,
     required: true,
   })
   @Length(MIN_LENGTH_USERNAME, MAX_LENGTH_USERNAME, {
@@ -33,7 +33,7 @@ export default class CreateUserDto {
 
   @ApiProperty({
     description: UserApiDescription.City,
-    example: 'Москва',
+    example: InputExample.City,
     required: true,
   })
   @IsEnum(City, {
@@ -44,7 +44,7 @@ export default class CreateUserDto {
 
   @ApiProperty({
     description: UserApiDescription.Password,
-    example: '123456',
+    example: InputExample.Password,
     required: true,
   })
   @Length(MIN_LENGTH_PASSWORD, MAX_LENGTH_PASSWORD, {
@@ -54,7 +54,7 @@ export default class CreateUserDto {
 
   @ApiProperty({
     description: UserApiDescription.DateBirth,
-    example: '1981-03-12',
+    example: InputExample.Date,
     required: true,
   })
   @IsDate({
@@ -68,7 +68,7 @@ export default class CreateUserDto {
 
   @ApiProperty({
     description: UserApiDescription.Role,
-    example: UserRole.Customer,
+    example: InputExample.Role,
     required: true,
   })
   @IsEnum(UserRole, {

@@ -1,12 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { City, UserRole } from '@taskforce/shared-types';
+import { City, InputExample, File, UserRole } from '@taskforce/shared-types';
 import { Expose, Transform } from 'class-transformer';
 import { ResponseGroup, UserApiDescription } from '../user.constant';
 
 export class UserRdo {
   @ApiProperty({
     description: UserApiDescription.Id,
-    example: 'd04eb35d-c36f-4e2b-b828-136379c7c6e3',
+    example: InputExample.MongoId,
   })
   @Transform(({ obj }) => obj._id.toString())
   @Expose({ name: '_id' })
@@ -14,44 +14,43 @@ export class UserRdo {
 
   @ApiProperty({
     description: UserApiDescription.Email,
-    example: 'user@user.local',
+    example: InputExample.Email,
   })
   @Expose()
   public email: string;
 
   @ApiProperty({
     description: UserApiDescription.Name,
-    example: 'Иван Иванов',
+    example: InputExample.Name,
   })
   @Expose()
   public userName: string;
 
   @ApiProperty({
     description: UserApiDescription.City,
-    example: 'Москва',
+    example: InputExample.City,
   })
   @Expose()
   public city: City;
 
   @ApiProperty({
     description: UserApiDescription.DateBirth,
-    example: '1981-03-12',
+    example: InputExample.Date,
   })
   @Expose()
   public dateBirth: string;
 
   @ApiProperty({
     description: UserApiDescription.Role,
-    example: 'Customer or contractor',
+    example: InputExample.Role,
   })
   @Expose()
   public role: UserRole;
 
   @ApiProperty({
-    description: UserApiDescription.Avatar,
-    example: '/images/user.png',
+    description: UserApiDescription.Image,
+    example: InputExample.PictureFile,
   })
-  @Expose()
   @Expose({
     groups: [ResponseGroup.Avatar, UserRole.Customer, UserRole.Contractor],
   })
@@ -59,57 +58,57 @@ export class UserRdo {
 
   @ApiProperty({
     description: UserApiDescription.Info,
-    example: 'Text about user',
+    example: InputExample.Text,
   })
   @Expose()
   public userInfo: string;
 
   @ApiProperty({
     description: UserApiDescription.TasksPublished,
-    example: '10',
+    example: InputExample.Number,
   })
-  @Expose()
+  @Expose({ groups: [UserRole.Customer] })
   public publishedTasksCounter?: number;
 
   @ApiProperty({
     description: UserApiDescription.TasksNew,
-    example: '10',
+    example: InputExample.Number,
   })
-  @Expose()
+  @Expose({ groups: [UserRole.Customer] })
   tasksWithNewStatus?: number;
 
   @ApiProperty({
-    description: UserApiDescription.Specialty,
-    example: ['plumber', 'locksmith', 'mechanic'],
+    description: UserApiDescription.Occupation,
+    example: InputExample.Occupations,
   })
-  @Expose()
+  @Expose({ groups: [UserRole.Contractor] })
   public specialty?: string[];
 
   @ApiProperty({
     description: UserApiDescription.Rating,
-    example: '10',
+    example: InputExample.Rating,
   })
-  @Expose()
+  @Expose({ groups: [UserRole.Contractor] })
   public rating?: number;
 
   @ApiProperty({
     description: UserApiDescription.Rank,
-    example: '10',
+    example: InputExample.Number,
   })
-  @Expose()
+  @Expose({ groups: [UserRole.Contractor] })
   public ranking?: number;
 
   @ApiProperty({
     description: UserApiDescription.TaskDone,
-    example: '10',
+    example: InputExample.Number,
   })
-  @Expose()
+  @Expose({ groups: [UserRole.Contractor] })
   public completedTasks?: number;
 
   @ApiProperty({
     description: UserApiDescription.TaskFailed,
-    example: '10',
+    example: InputExample.Number,
   })
-  @Expose()
+  @Expose({ groups: [UserRole.Contractor] })
   public failedTasks?: number;
 }

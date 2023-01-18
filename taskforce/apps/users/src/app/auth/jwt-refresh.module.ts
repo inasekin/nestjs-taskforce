@@ -9,15 +9,13 @@ import { RefreshTokenStrategy } from './strategies/refresh-token.strategy';
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: getJwtRefreshOptions,
-    }),
-  ],
-  providers: [
-    {
-      provide: 'JwtRefreshService',
-      useExisting: JwtService,
+      useFactory: getJwtRefreshOptions
+    })],
+  providers: [{
+    provide: 'JwtRefreshService',
+    useExisting: JwtService,
     },
-    RefreshTokenStrategy,
+    RefreshTokenStrategy
   ],
   exports: ['JwtRefreshService'],
 })
