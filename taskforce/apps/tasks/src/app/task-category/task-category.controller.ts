@@ -1,17 +1,23 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { fillObject } from '@taskforce/core';
 import CreateTaskCategoryDto from './dto/create-task-category.dto';
 import UpdateTaskCategoryDto from './dto/update-task-category.dto';
 import { TaskCategoryRdo } from './rdo/task-category.rdo';
 import { TaskCategoryService } from './task-category.service';
-import {ApiTags} from "@nestjs/swagger";
 
-@ApiTags('task categories')
 @Controller('categories')
 export class TaskCategoryController {
-  constructor(
-    private categoryService: TaskCategoryService
-  ) {}
+  constructor(private categoryService: TaskCategoryService) {}
 
   @Post('/')
   async create(@Body() dto: CreateTaskCategoryDto) {
@@ -33,7 +39,7 @@ export class TaskCategoryController {
 
   @Patch('/:id')
   async update(@Param('id') id: string, @Body() dto: UpdateTaskCategoryDto) {
-    const updatedCategory = await this.categoryService.update(id, dto)
+    const updatedCategory = await this.categoryService.update(id, dto);
     return fillObject(TaskCategoryRdo, updatedCategory);
   }
 

@@ -11,7 +11,7 @@ export default class TaskTagRdo {
 
   @ApiProperty({
     description: 'The uniq task tag title',
-    example: 'Ремонт'
+    example: 'Уборка'
   })
   @Expose()
   public title: string;

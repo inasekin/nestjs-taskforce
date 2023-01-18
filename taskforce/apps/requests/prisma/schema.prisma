@@ -1,0 +1,22 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output = "../../../node_modules/.prisma/requests-client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Request {
+  id             String          @id @default(uuid())
+  requestText    String
+  costProposal   Int
+  contractorId   String
+  taskId         String
+  publishedAt    DateTime        @default(now())
+  createdAt      DateTime        @default(now())
+}

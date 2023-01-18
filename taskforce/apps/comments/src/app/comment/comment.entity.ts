@@ -1,10 +1,10 @@
 import { Comment } from '@taskforce/shared-types';
 
 export default class CommentEntity implements Comment {
-  public _id?: string;
+  public id: string;
   public authorId: string;
   public taskId: string;
-  public creationDate?: Date;
+  public publishAt: Date;
   public text: string;
 
   constructor(comment: Comment) {
@@ -16,10 +16,10 @@ export default class CommentEntity implements Comment {
   }
 
   public fillEntity(comment: Comment) {
-    this._id = comment._id;
+    this.id = comment?.id;
     this.authorId = comment.authorId;
     this.taskId = comment.taskId;
-    this.creationDate = new Date();
-    this.text = comment?.text;
+    this.publishAt = new Date();
+    this.text = comment.text;
   }
 }

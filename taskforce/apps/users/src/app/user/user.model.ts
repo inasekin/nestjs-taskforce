@@ -1,21 +1,16 @@
-import { City } from '@taskforce/shared-types';
-import { Document } from 'mongoose';
-import { User, UserRole } from '@taskforce/shared-types';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { City, File, User, UserRole } from '@taskforce/shared-types';
+import { Document } from 'mongoose';
 
+const USERS_COLLECTION_NAME = 'users';
 @Schema({
-  collection: 'users',
+  collection: USERS_COLLECTION_NAME,
 })
 export class UserModel extends Document implements User {
   @Prop({
     required: true,
   })
   public userName: string;
-
-  @Prop({
-    required: true,
-  })
-  public lastName: string;
 
   @Prop({
     required: true,
@@ -35,6 +30,9 @@ export class UserModel extends Document implements User {
   })
   public passwordHash: string;
 
+  @Prop()
+  public refreshTokenHash?: string;
+
   @Prop({
     required: true,
   })
@@ -43,11 +41,18 @@ export class UserModel extends Document implements User {
   @Prop({
     required: true,
     type: String,
+    enum: UserRole,
   })
   public role: UserRole;
 
-  @Prop()
-  public avatar?: string;
+  @Prop({
+    _id: false,
+    type: File,
+  })
+  public avatar?: {
+    url: string;
+    name: string;
+  };
 
   @Prop()
   public userInfo?: string;

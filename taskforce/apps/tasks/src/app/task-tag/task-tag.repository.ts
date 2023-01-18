@@ -5,14 +5,14 @@ import { PrismaService } from '../prisma/prisma.service';
 import { TaskTagEntity } from './task-tag.entity';
 
 @Injectable()
-export class TaskTagRepository implements CRUDRepository<TaskTagEntity, string, TaskTag>{
-  constructor(
-    private readonly prisma: PrismaService
-  ) {}
+export class TaskTagRepository
+  implements CRUDRepository<TaskTagEntity, string, TaskTag>
+{
+  constructor(private readonly prisma: PrismaService) {}
 
   public async create(item: TaskTagEntity): Promise<TaskTag> {
     return this.prisma.tag.create({
-      data: { ...item.toObject() }
+      data: { ...item.toObject() },
     });
   }
 
@@ -20,26 +20,26 @@ export class TaskTagRepository implements CRUDRepository<TaskTagEntity, string, 
     return this.prisma.tag.findMany({
       where: {
         id: {
-          in: ids.length > 0 ? ids : undefined
-        }
-      }
+          in: ids.length > 0 ? ids : undefined,
+        },
+      },
     });
   }
 
-  public async findById(id: string): Promise<TaskTag | null>{
+  public async findById(id: string): Promise<TaskTag | null> {
     return this.prisma.tag.findFirst({
       where: {
-        id
-      }
+        id,
+      },
     });
   }
 
-  public async update(id: string, item: TaskTagEntity): Promise<TaskTag>{
+  public async update(id: string, item: TaskTagEntity): Promise<TaskTag> {
     return this.prisma.tag.update({
       where: {
-        id
+        id,
       },
-      data: { ...item.toObject(), id}
+      data: { ...item.toObject(), id },
     });
   }
 
@@ -47,7 +47,7 @@ export class TaskTagRepository implements CRUDRepository<TaskTagEntity, string, 
     await this.prisma.tag.delete({
       where: {
         id,
-      }
+      },
     });
   }
 }

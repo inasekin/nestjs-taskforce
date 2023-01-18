@@ -7,10 +7,7 @@ import { TaskTagRepository } from './task-tag.repository';
 
 @Injectable()
 export class TaskTagService {
-
-  constructor(
-    private readonly tagRepository: TaskTagRepository
-  ) {}
+  constructor(private readonly tagRepository: TaskTagRepository) {}
 
   async create(dto: CreateTaskTagDto): Promise<TaskTag> {
     const tagEntity = new TaskTagEntity(dto);

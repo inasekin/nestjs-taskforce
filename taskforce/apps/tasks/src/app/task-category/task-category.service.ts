@@ -7,10 +7,7 @@ import { TaskCategoryRepository } from './task-category.repository';
 
 @Injectable()
 export class TaskCategoryService {
-
-  constructor(
-    private readonly categoryRepository: TaskCategoryRepository
-  ) {}
+  constructor(private readonly categoryRepository: TaskCategoryRepository) {}
 
   async create(dto: CreateTaskCategoryDto): Promise<TaskCategory> {
     const categoryEntity = new TaskCategoryEntity(dto);

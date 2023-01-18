@@ -1,9 +1,10 @@
-export const ERROR_TEXT_AUTH_USER_EXISTS = 'User with this email exists';
-export const AUTH_USER_NOT_FOUND = 'User not found';
-export const AUTH_USER_PASSWORD_WRONG = 'User password is wrong';
+export const SALT_ROUNDS = 11;
 
-export const MAX_LENGTH_FIO = 50;
-export const MIN_LENGTH_FIO = 3;
-
-export const MIN_LENGTH_PASSWORD = 6;
-export const MAX_LENGTH_PASSWORD = 12;
+export const AuthApiError = {
+  AlreadyAuthorized: `The user has an active session, please logout`,
+  AccessTokenIsExpired: `The access token is expired`,
+  AccessTokenIsInvalid: `The access token is invalid, please perform authorization`,
+  RefreshTokenIsExpired: `The refresh token is expired, please perform authorization`,
+  RefreshTokenNotFound: `The refresh token not found, please perform authorization`,
+  RefreshTokenIsWrong: `The refresh token not same as last registered refresh token, please perform authorization`,
+} as const;

@@ -6,15 +6,38 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
+  Query,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
+import {
+  Ctx,
+  EventPattern,
+  MessagePattern,
+  Payload,
+  RmqContext,
+} from '@nestjs/microservices';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { fillObject } from '@taskforce/core';
+import {
+  createMulterOptions,
+  createPattern,
+  fillObject,
+} from '@taskforce/core';
+import { CommandMessage, UserRole } from '@taskforce/shared-types';
+import { ActionData } from './action-data.interface';
+
 import CreateTaskDto from './dto/create-task.dto';
 import UpdateTaskDto from './dto/update-task.dto';
+import { TaskQuery } from './query/task.query';
 import TaskRdo from './rdo/task.rdo';
+import { MAX_FILE_SIZE, ResponseGroup, TaskAction } from './task.constant';
 import { TaskService } from './task.service';
+
+const multerOptions = createMulterOptions(MAX_FILE_SIZE);
 
 @ApiTags('tasks')
 @Controller('tasks')
@@ -32,14 +55,14 @@ export class TaskController {
     return fillObject(TaskRdo, newTask);
   }
 
-  @Get('/:id')
+  @Get(':id/show')
   @ApiResponse({
     type: TaskRdo,
     status: HttpStatus.OK,
     description: 'The task is found.',
   })
   async show(@Param('id') id: string) {
-    const existTask = await this.taskService.getById(id);
+    const existTask = await this.taskService.getTaskById(id);
     return fillObject(TaskRdo, existTask);
   }
 
@@ -49,19 +72,52 @@ export class TaskController {
     status: HttpStatus.OK,
     description: 'The new task was successfully created.',
   })
-  async getTasks() {
-    const tasks = await this.taskService.get();
+  async index(@Query() query: TaskQuery) {
+    //Hardcode before Rabbit implementation
+    const userRole = UserRole.Contractor;
+    const tasks = await this.taskService.getNewTasks(query, {
+      userRole: userRole,
+    });
     return fillObject(TaskRdo, tasks);
   }
 
-  @Patch('/:id')
+  @Get('my')
+  @ApiResponse({
+    type: TaskRdo,
+    status: HttpStatus.OK,
+    description: 'The new task was successfully created.',
+  })
+  async getMy(@Query() query: TaskQuery) {
+    //Hardcode before Rabbit implementation
+    const userId = '12';
+    const userRole = UserRole.Contractor;
+    const tasks = await this.taskService.getMyTasks(query, {
+      userRole: userRole,
+      userId: userId,
+    });
+    return fillObject(TaskRdo, tasks);
+  }
+
+  @Patch('/:taskId/status')
   @ApiResponse({
     type: TaskRdo,
     status: HttpStatus.OK,
     description: 'The task data has been successfully updated.',
   })
-  async updateTaskData(@Param('id') id: string, @Body() dto: UpdateTaskDto) {
-    const updatedTask = await this.taskService.update(id, dto);
+  async updateTask(
+    @Param('taskId', ParseIntPipe) taskId: string,
+    @Body() dto: UpdateTaskDto
+  ) {
+    //Hardcode before Rabbit implementation
+    const actionData: ActionData = {
+      userId: '13',
+      userRole: UserRole.Customer,
+    };
+    const updatedTask = await this.taskService.updateTaskStatus(
+      taskId,
+      dto,
+      actionData
+    );
     return fillObject(TaskRdo, updatedTask);
   }
 
@@ -73,5 +129,45 @@ export class TaskController {
   })
   async destroy(@Param('id') id: string) {
     await this.taskService.delete(id);
+  }
+
+  @ApiResponse({
+    type: TaskRdo,
+    status: HttpStatus.OK,
+    description: 'Task picture has been successfully uploaded',
+  })
+  @Post('/:taskId/picture')
+  // WIP @UseGuards(JwtAccessGuard)
+  @UseInterceptors(FileInterceptor('picture', multerOptions))
+  public async uploadTaskPicture(
+    @Param('taskId', ParseIntPipe) taskId: string,
+    @UploadedFile() file: any
+  ) {
+    //Hardcode before Rabbit implementation
+    const user: ActionData = {
+      userId: '13',
+      userRole: UserRole.Customer,
+      action: TaskAction.UploadPicture,
+    };
+    const dto: UpdateTaskDto = {
+      taskPicture: {
+        url: file.path,
+        name: file.filename,
+      },
+    };
+
+    const updatedTask = await this.taskService.uploadPicture(taskId, dto, user);
+    return fillObject(TaskRdo, updatedTask, [ResponseGroup.Picture]);
+  }
+
+  @MessagePattern(createPattern(CommandMessage.GetNewTasks))
+  public async getNewTask(@Payload() data: any, @Ctx() context: RmqContext) {
+    const unsentTasks = this.taskService.getUnsentTasks();
+    return fillObject(TaskRdo, unsentTasks);
+  }
+
+  @EventPattern(createPattern(CommandMessage.MarkTasksAsSent))
+  public async markTasksAsSent(@Payload('taskIds') taskIds: string[]) {
+    await this.taskService.markTasksAsSent(taskIds);
   }
 }

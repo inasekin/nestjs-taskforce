@@ -1,29 +1,31 @@
-import CreateCommentDto from './dto/create-comment.dto';
-import CommentEntity from './comment.entity';
-import { fillObject } from '@taskforce/core';
-import CommentRdo from './rdo/comment.rdo';
-import { CommentMemoryRepository } from './comment-memory.repository';
 import { Injectable } from '@nestjs/common';
+import CommentEntity from './comment.entity';
+import CommentRepository from './comment.repository';
+import CreateCommentDto from './dto/create-comment.dto';
+import { CommentQuery } from './query/comment.query';
 
 @Injectable()
 export class CommentService {
-  constructor(private readonly commentRepository: CommentMemoryRepository) {}
+  constructor(private readonly commentRepository: CommentRepository) {}
 
-  public async create(authorId: string, createCommentDto: CreateCommentDto) {
-    const comment = { ...createCommentDto, authorId: authorId };
-    const commentEntity = new CommentEntity(comment);
-
-    const newComment = this.commentRepository.create(commentEntity);
-
-    return fillObject(CommentRdo, newComment);
+  async create(dto: CreateCommentDto) {
+    const commentEntity = new CommentEntity(dto);
+    return this.commentRepository.create(commentEntity);
   }
 
-  public async getTaskComments(taskId: string) {
-    const existComments = await this.commentRepository.findByTask(taskId);
-    return existComments.map((item) => fillObject(CommentRdo, item));
+  async getComments(query: CommentQuery) {
+    return this.commentRepository.find(query);
   }
 
-  public async deleteComment(commentId: string) {
+  async getCommentById(commentId: string) {
+    return this.commentRepository.findById(commentId);
+  }
+
+  async deleteComment(commentId: string) {
     await this.commentRepository.destroy(commentId);
+  }
+
+  async deleteCommentsByTaskId(taskId: string) {
+    await this.commentRepository.destroyByTaskId(taskId);
   }
 }

@@ -5,14 +5,14 @@ import { PrismaService } from '../prisma/prisma.service';
 import { TaskCategoryEntity } from './task-category.entity';
 
 @Injectable()
-export class TaskCategoryRepository implements CRUDRepository<TaskCategoryEntity, string, TaskCategory>{
-  constructor(
-    private readonly prisma: PrismaService
-  ) {}
+export class TaskCategoryRepository
+  implements CRUDRepository<TaskCategoryEntity, number, TaskCategory>
+{
+  constructor(private readonly prisma: PrismaService) {}
 
   public async create(item: TaskCategoryEntity): Promise<TaskCategory> {
     return this.prisma.category.create({
-      data: { ...item.toObject() }
+      data: { ...item.toObject() },
     });
   }
 
@@ -20,26 +20,29 @@ export class TaskCategoryRepository implements CRUDRepository<TaskCategoryEntity
     return this.prisma.category.findMany({
       where: {
         id: {
-          in: ids.length > 0 ? ids : undefined
-        }
-      }
+          in: ids.length > 0 ? ids : undefined,
+        },
+      },
     });
   }
 
-  public async findById(id: string): Promise<TaskCategory | null>{
+  public async findById(id: string): Promise<TaskCategory | null> {
     return this.prisma.category.findFirst({
       where: {
-        id
-      }
+        id,
+      },
     });
   }
 
-  public async update(id: string, item: TaskCategoryEntity): Promise<TaskCategory>{
+  public async update(
+    id: string,
+    item: TaskCategoryEntity
+  ): Promise<TaskCategory> {
     return this.prisma.category.update({
       where: {
-        id
+        id,
       },
-      data: { ...item.toObject(), id}
+      data: { ...item.toObject(), id },
     });
   }
 
@@ -47,7 +50,7 @@ export class TaskCategoryRepository implements CRUDRepository<TaskCategoryEntity
     await this.prisma.category.delete({
       where: {
         id,
-      }
+      },
     });
   }
 }

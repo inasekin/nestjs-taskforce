@@ -1,17 +1,23 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { fillObject } from '@taskforce/core';
 import CreateTaskTagDto from './dto/create-task-tag.dto';
 import UpdateTaskTagDto from './dto/update-task-tag.dto';
 import TaskTagRdo from './rdo/task-tag.rdo';
 import { TaskTagService } from './task-tag.service';
-import {ApiTags} from "@nestjs/swagger";
 
-@ApiTags('task tags')
 @Controller('tags')
 export class TaskTagController {
-  constructor(
-    private tagService: TaskTagService
-  ) {}
+  constructor(private tagService: TaskTagService) {}
 
   @Post('/')
   async create(@Body() dto: CreateTaskTagDto) {
@@ -33,7 +39,7 @@ export class TaskTagController {
 
   @Patch('/:id')
   async update(@Param('id') id: string, @Body() dto: UpdateTaskTagDto) {
-    const updatedTag = await this.tagService.update(id, dto)
+    const updatedTag = await this.tagService.update(id, dto);
     return fillObject(TaskTagRdo, updatedTag);
   }
 
