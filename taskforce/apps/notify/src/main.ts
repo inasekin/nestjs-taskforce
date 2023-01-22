@@ -10,6 +10,8 @@ import { getRabbitMqConfig } from './config/rabbitmq.config';
 
 import { AppModule } from './app/app.module';
 
+const DEFAULT_PORT = 3338;
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
@@ -23,11 +25,9 @@ async function bootstrap() {
 
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
-  const port = process.env.PORT || 3338;
+  const port = process.env.PORT || DEFAULT_PORT;
   await app.listen(port);
-  Logger.log(
-    `🚀 REST is running on: http://localhost:${port}/${globalPrefix}`
-  );
+  Logger.log(`🚀 REST is running on: http://localhost:${port}/${globalPrefix}`);
 }
 
 bootstrap();

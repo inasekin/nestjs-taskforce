@@ -6,7 +6,7 @@ import { TaskCategoryEntity } from './task-category.entity';
 
 @Injectable()
 export class TaskCategoryRepository
-  implements CRUDRepository<TaskCategoryEntity, number, TaskCategory>
+  implements CRUDRepository<TaskCategoryEntity, string, TaskCategory>
 {
   constructor(private readonly prisma: PrismaService) {}
 

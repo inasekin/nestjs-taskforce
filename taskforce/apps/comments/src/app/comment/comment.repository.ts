@@ -49,7 +49,12 @@ export default class CommentRepository
   }
 
   public async update(id: string, item: CommentEntity): Promise<Comment> {
-    return Promise.resolve(undefined);
+    return this.prisma.comment.update({
+      where: {
+        id,
+      },
+      data: { ...item.toObject(), id },
+    });
   }
 
   public async destroy(id: string): Promise<void> {

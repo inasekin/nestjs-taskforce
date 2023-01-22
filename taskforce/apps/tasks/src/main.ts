@@ -11,6 +11,8 @@ import * as process from 'process';
 import { AppModule } from './app/app.module';
 import { getRabbitMqConfig } from './config/rabbitmq.config';
 
+const DEFAULT_PORT = 3334;
+
 async function bootstrap() {
   const tasksApp = await NestFactory.create(AppModule);
 
@@ -32,12 +34,14 @@ async function bootstrap() {
 
   await tasksApp.startAllMicroservices();
 
-  tasksApp.useGlobalPipes(new ValidationPipe({
-    transform: true,
-    skipUndefinedProperties: true
-  }));
+  tasksApp.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      skipUndefinedProperties: true,
+    })
+  );
 
-  const port = process.env.PORT || 3334;
+  const port = process.env.PORT || DEFAULT_PORT;
   await tasksApp.listen(port);
   Logger.log(
     `🚀 Tasks application is running on: http://localhost:${port}/${globalPrefix}`

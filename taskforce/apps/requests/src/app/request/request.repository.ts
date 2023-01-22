@@ -19,8 +19,14 @@ export default class RequestRepository
     });
   }
 
-  public async find(): Promise<Request[]> {
-    return [];
+  public async find(ids: string[] = []): Promise<Request[]> {
+    return this.prisma.request.findMany({
+      where: {
+        id: {
+          in: ids.length > 0 ? ids : undefined,
+        },
+      },
+    });
   }
 
   public async findByTaskId(taskId: string): Promise<Request[]> {
@@ -31,15 +37,28 @@ export default class RequestRepository
     });
   }
 
-  public async update(): Promise<Request> {
-    return Promise.resolve(undefined);
+  public async update(id: string, item: RequestEntity): Promise<Request> {
+    return this.prisma.request.update({
+      where: {
+        id,
+      },
+      data: { ...item.toObject(), id },
+    });
   }
 
   public async destroy(id: string): Promise<void> {
-    return Promise.resolve(undefined);
+    await this.prisma.request.delete({
+      where: {
+        id,
+      },
+    });
   }
 
   findById(id: string): Promise<Request | null> {
-    return Promise.resolve(undefined);
+    return this.prisma.request.findFirst({
+      where: {
+        id,
+      },
+    });
   }
 }

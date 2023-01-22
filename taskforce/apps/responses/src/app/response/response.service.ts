@@ -22,7 +22,7 @@ export class ResponseService {
     return { ...newResponse, evaluationsSum: evaluationsSum };
   }
 
-  async index() {
+  async get() {
     return this.responseRepository.find();
   }
 
@@ -30,7 +30,7 @@ export class ResponseService {
     return this.responseRepository.findByContractorsId(contractorId);
   }
 
-  async delete(responseId: number) {
+  async delete(responseId: string) {
     await this.responseRepository.destroy(responseId);
   }
 }

@@ -9,6 +9,8 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app/app.module';
 import * as process from 'process';
 
+const DEFAULT_PORT = 3336;
+
 async function bootstrap() {
   const responsesApp = await NestFactory.create(AppModule);
 
@@ -24,11 +26,13 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(responsesApp, config);
   SwaggerModule.setup('spec', responsesApp, document);
 
-  responsesApp.useGlobalPipes(new ValidationPipe({
-    skipUndefinedProperties: true
-  }));
+  responsesApp.useGlobalPipes(
+    new ValidationPipe({
+      skipUndefinedProperties: true,
+    })
+  );
 
-  const port = process.env.PORT || 3336;
+  const port = process.env.PORT || DEFAULT_PORT;
   await responsesApp.listen(port);
   Logger.log(
     `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`

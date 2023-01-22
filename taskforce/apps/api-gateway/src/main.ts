@@ -8,11 +8,13 @@ import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app/app.module';
 
+const DEFAULT_PORT = 3331;
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
-  const port = process.env.PORT || 3331;
+  const port = process.env.PORT || DEFAULT_PORT;
   await app.listen(port);
   Logger.log(
     `🚀 TaskForce API is running on: http://localhost:${port}/${globalPrefix}`

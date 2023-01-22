@@ -16,4 +16,8 @@ export class RequestService {
   async getRequestsByTaskId(taskId: string) {
     return this.requestRepository.findByTaskId(taskId);
   }
+
+  async get() {
+    return this.requestRepository.find();
+  }
 }

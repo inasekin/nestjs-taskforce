@@ -21,4 +21,10 @@ export class ResponseController {
     );
     return fillObject(ResponseRdo, responses);
   }
+
+  @Get('/')
+  async index() {
+    const responses = await this.responseService.get();
+    return fillObject(ResponseRdo, responses);
+  }
 }

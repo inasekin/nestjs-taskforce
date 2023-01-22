@@ -5,8 +5,12 @@ import * as process from 'process';
 
 import { AppModule } from './app/app.module';
 
+const DEFAULT_PORT = 3333;
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const globalPrefix = 'api';
+  app.setGlobalPrefix(globalPrefix);
 
   const config = new DocumentBuilder()
     .setTitle('The «Users» service')
@@ -14,20 +18,19 @@ async function bootstrap() {
     .setVersion('1.0')
     .build();
 
-  const globalPrefix = 'api';
-  app.setGlobalPrefix(globalPrefix);
-
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('spec', app, document);
 
-  app.useGlobalPipes(new ValidationPipe({
-    skipUndefinedProperties: true
-  }));
+  app.useGlobalPipes(
+    new ValidationPipe({
+      skipUndefinedProperties: true,
+    })
+  );
 
-  const port = process.env.PORT || 3333;
+  const port = process.env.PORT || DEFAULT_PORT;
   await app.listen(port);
   Logger.log(
-    `🚀 Users application is running on: http://localhost:${port}/${globalPrefix}`
+    `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`
   );
 }
 

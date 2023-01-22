@@ -5,7 +5,7 @@ import * as process from 'process';
 const prisma = new PrismaClient();
 
 async function fillDb() {
-  let comments: Prisma.CommentCreateInput[] = [
+  const comments: Prisma.CommentCreateInput[] = [
     {
       authorId: '63a898135261f8c9e2ec261d',
       taskId: 1,

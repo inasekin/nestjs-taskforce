@@ -26,4 +26,10 @@ export class RequestController {
     const newRequest = await this.requestService.create(dto);
     return fillObject(RequestRdo, newRequest);
   }
+
+  @Get('/')
+  async index() {
+    const requests = await this.requestService.get();
+    return fillObject(RequestRdo, requests);
+  }
 }

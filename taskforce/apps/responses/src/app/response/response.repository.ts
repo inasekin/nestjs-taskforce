@@ -19,10 +19,6 @@ export default class ResponseRepository
     });
   }
 
-  public async find(): Promise<Response[]> {
-    return [];
-  }
-
   public async findByContractorsId(contractorId: string): Promise<Response[]> {
     return this.prisma.response.findMany({
       where: {
@@ -39,16 +35,39 @@ export default class ResponseRepository
     });
   }
 
+  public async find(ids: string[] = []): Promise<Response[]> {
+    return this.prisma.response.findMany({
+      where: {
+        id: {
+          in: ids.length > 0 ? ids : undefined,
+        },
+      },
+    });
+  }
+
   public async update(id: string, item: ResponseEntity): Promise<Response> {
-    return Promise.resolve(undefined);
+    return this.prisma.response.update({
+      where: {
+        id,
+      },
+      data: { ...item.toObject(), id },
+    });
   }
 
   public async destroy(id: string): Promise<void> {
-    return Promise.resolve(undefined);
+    await this.prisma.response.delete({
+      where: {
+        id,
+      },
+    });
   }
 
   public async findById(id: string): Promise<Response | null> {
-    return Promise.resolve(undefined);
+    return this.prisma.response.findFirst({
+      where: {
+        id,
+      },
+    });
   }
 
   public async getExecutorsEvaluationsSum(
