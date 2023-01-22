@@ -17,4 +17,4 @@ export const InputExample = {
   PostgreId: '043536428286379763',
   Password: '123456',
   PasswordUpdate: '234567',
-} as const;
+};

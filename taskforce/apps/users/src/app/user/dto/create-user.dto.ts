@@ -6,10 +6,8 @@ import { AgeValidator } from '../../validators/age.validator';
 import {
   UserApiDescription,
   UserApiError,
-  MIN_LENGTH_USERNAME,
-  MAX_LENGTH_USERNAME,
-  MIN_LENGTH_PASSWORD,
-  MAX_LENGTH_PASSWORD,
+  UserNameLength,
+  UserPasswordLength,
 } from '../user.constant';
 
 export default class CreateUserDto {
@@ -26,7 +24,7 @@ export default class CreateUserDto {
     example: InputExample.Name,
     required: true,
   })
-  @Length(MIN_LENGTH_USERNAME, MAX_LENGTH_USERNAME, {
+  @Length(UserNameLength.Min, UserNameLength.Max, {
     message: UserApiError.NameNotValid,
   })
   public userName: string;
@@ -47,7 +45,7 @@ export default class CreateUserDto {
     example: InputExample.Password,
     required: true,
   })
-  @Length(MIN_LENGTH_PASSWORD, MAX_LENGTH_PASSWORD, {
+  @Length(UserPasswordLength.Min, UserPasswordLength.Max, {
     message: UserApiError.PasswordNotValid,
   })
   public password: string;
