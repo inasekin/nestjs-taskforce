@@ -7,6 +7,8 @@ import { ensureDir } from 'fs-extra';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 
+export const MIME_TYPE_REG_EXP = /\/(jpg|jpeg|png)$/;
+
 export function fillObject<T, V>(
   dto: ClassConstructor<T>,
   plainObject: V,
@@ -36,7 +38,7 @@ export function createMulterOptions(maxFileSize: number) {
       fileSize: maxFileSize,
     },
     fileFilter: (req: any, file: any, cb: any) => {
-      if (file.mimetype.match(/\/(jpg|jpeg|png)$/)) {
+      if (file.mimetype.match(MIME_TYPE_REG_EXP)) {
         cb(null, true);
       } else {
         cb(

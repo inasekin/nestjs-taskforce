@@ -1,20 +1,20 @@
 import { City, Status, UserRole } from '@taskforce/shared-types';
 
-export const IMAGE_REGULAR_EXP = /[\w/-]+.(jpg|png)/;
-
 export const MAX_FILE_SIZE = 512000;
 export const SALT_ROUNDS = 10;
 export const MIN_USER_AGE = 18;
-
-export const MIN_LENGTH_USERNAME = 3;
-export const MAX_LENGTH_USERNAME = 50;
-
-export const MIN_LENGTH_PASSWORD = 6;
-export const MAX_LENGTH_PASSWORD = 12;
-
 export const MAX_LENGTH_USER_INFO = 300;
-
 export const MAX_SPECIALITY_LENGTH = 5;
+
+export const enum UserPasswordLength {
+  Min = 6,
+  Max = 12,
+}
+
+export const enum UserNameLength {
+  Min = 3,
+  Max = 50,
+}
 
 export const UserApiError = {
   AgeNotValid: `User should be older than ${MIN_USER_AGE}`,
@@ -25,10 +25,10 @@ export const UserApiError = {
   EmailNotValid: 'The email is not valid',
   Exists: 'User with this email already exists',
   InfoNotValid: `User info should not be more than ${MAX_LENGTH_USER_INFO} chars length`,
-  NameNotValid: `User name, min ${MIN_LENGTH_USERNAME}, max ${MAX_LENGTH_USERNAME} chars length`,
+  NameNotValid: `User name, min ${UserNameLength.Min}, max ${UserNameLength.Max} chars length`,
   NotFound: 'User not found',
   OccupationNotValid: `Maximum count of executor's occupation is ${MAX_SPECIALITY_LENGTH}`,
-  PasswordNotValid: `Password min length is  ${MIN_LENGTH_PASSWORD}, max is ${MAX_LENGTH_PASSWORD}`,
+  PasswordNotValid: `Password min length is  ${UserPasswordLength.Min}, max is ${UserPasswordLength.Max}`,
   PasswordIsWrong: 'User password is wrong',
   RoleIsWrong: `User role field must contains any of these values: ${Object.values(
     UserRole
@@ -46,10 +46,10 @@ export const UserApiDescription = {
   Email: 'User unique email address',
   Id: 'The uniq user id',
   Info: `Optional user info, max ${MAX_LENGTH_USER_INFO} chars length`,
-  Name: `User name and surname, min ${MIN_LENGTH_USERNAME}, max ${MAX_LENGTH_USERNAME} chars`,
-  NewPassword: `New password, min ${MIN_LENGTH_PASSWORD}, max ${MAX_LENGTH_PASSWORD} chars length`,
+  Name: `User name and surname, min ${UserNameLength.Min}, max ${UserNameLength.Max} chars`,
+  NewPassword: `New password, min ${UserPasswordLength.Min}, max ${UserPasswordLength.Max} chars length`,
   Occupation: `List of executor's specialty, max count is ${MAX_SPECIALITY_LENGTH}`,
-  Password: `User password, min ${MIN_LENGTH_PASSWORD}, max ${MAX_LENGTH_PASSWORD} chars length`,
+  Password: `User password, min ${UserPasswordLength.Min}, max ${UserPasswordLength.Max} chars length`,
   Rank: 'Executor rank',
   Rating: 'Executor rating',
   Role: `Any of user's role values: ${Object.values(UserRole).join(', ')}`,

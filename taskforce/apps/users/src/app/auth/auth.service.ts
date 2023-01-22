@@ -16,7 +16,7 @@ export class AuthService {
     @Inject('JwtAccessService') private readonly jwtAccessService: JwtService,
     @Inject('JwtRefreshService') private readonly jwtRefreshService: JwtService,
     @Inject(RABBITMQ_SERVICE) private readonly rabbitClient: ClientProxy,
-    private readonly tokenSessionRepository: TokenSessionRepository,
+    private readonly tokenSessionRepository: TokenSessionRepository
   ) {}
 
   private createPayload(dto: TokenDataDto): JwtPayload {
@@ -34,14 +34,13 @@ export class AuthService {
     const accessToken = await this.jwtAccessService.signAsync(payload);
     const refreshToken = await this.jwtRefreshService.signAsync(payload);
 
-    const expDateMilliseconds = await this
-      .jwtRefreshService
-      .decode(refreshToken)['exp'] * 1000;
+    const expDateMilliseconds =
+      (await this.jwtRefreshService.decode(refreshToken)['exp']) * 1000;
 
     const refreshTokenData = {
       userId: userId,
       expires: new Date(expDateMilliseconds),
-    }
+    };
 
     const refreshTokenEntity = new TokenSessionEntity(refreshTokenData);
     await refreshTokenEntity.setToken(refreshToken);
@@ -49,41 +48,41 @@ export class AuthService {
     const existToken = await this.tokenSessionRepository.findByUserId(userId);
     if (existToken) {
       const tokenId = fillObject(SessionTokenRdo, existToken)['id'];
-      await this.tokenSessionRepository.update(tokenId, refreshTokenEntity)
+      await this.tokenSessionRepository.update(tokenId, refreshTokenEntity);
     } else {
       await this.tokenSessionRepository.create(refreshTokenEntity);
     }
 
     return {
-      access_token: accessToken,
-      refresh_token: refreshToken,
+      accessToken,
+      refreshToken,
     };
   }
 
-  async refreshTokens(dto: TokenDataDto, refreshToken:string) {
+  async refreshTokens(dto: TokenDataDto, refreshToken: string) {
     const userId = dto.id;
     const existToken = await this.tokenSessionRepository.findByUserId(userId);
-    if (!existToken){
+    if (!existToken) {
       throw new UnauthorizedException(AuthApiError.RefreshTokenNotFound);
     }
     await this.tokenSessionRepository.destroy(userId);
 
     const refreshTokenEntity = new TokenSessionEntity(existToken);
     const validateToken = await refreshTokenEntity.compareToken(refreshToken);
-    if (!validateToken){
+    if (!validateToken) {
       throw new UnauthorizedException(AuthApiError.RefreshTokenIsWrong);
     }
     return await this.generateTokens(dto);
   }
-  async deleteRefreshToken(userId: string): Promise<void>{
+  async deleteRefreshToken(userId: string): Promise<void> {
     return this.tokenSessionRepository.destroy(userId);
   }
-  async getAccessTokenData(token: string)  {
+  async getAccessTokenData(token: string) {
     return this.jwtAccessService.decode(token);
   }
 
   async checkAuthorizationStatus(token: string): Promise<boolean> {
-    if (!token){
+    if (!token) {
       return false;
     }
     const authToken = token.replace('Bearer', '').trim();
@@ -92,7 +91,9 @@ export class AuthService {
       return false;
     }
     const { sub } = tokenData;
-    const activeUserSession = await this.tokenSessionRepository.findByUserId(sub);
+    const activeUserSession = await this.tokenSessionRepository.findByUserId(
+      sub
+    );
 
     return !!activeUserSession;
   }

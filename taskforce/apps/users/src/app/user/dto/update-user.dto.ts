@@ -16,8 +16,7 @@ import {
   UserApiDescription,
   MAX_SPECIALITY_LENGTH,
   MAX_LENGTH_USER_INFO,
-  MIN_LENGTH_USERNAME,
-  MAX_LENGTH_USERNAME,
+  UserNameLength,
 } from '../user.constant';
 
 export default class UpdateUserDto {
@@ -26,7 +25,7 @@ export default class UpdateUserDto {
     description: UserApiDescription.Name,
     example: 'Keks Academiev',
   })
-  @Length(MIN_LENGTH_USERNAME, MAX_LENGTH_USERNAME, {
+  @Length(UserNameLength.Min, UserNameLength.Max, {
     message: UserApiError.NameNotValid,
   })
   public userName?: string;
